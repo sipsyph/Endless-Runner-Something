@@ -39,6 +39,6 @@ public class Enemy : MonoBehaviour
         hit = true;
         //GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         EnemyAnimation.PlayGettingHitAnimation();
-        Debug.Log("Enemy hit by "+collision.transform.name);
+        //Debug.Log("Enemy hit by "+collision.transform.name);
     }
 }

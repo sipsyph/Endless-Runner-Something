@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public Transform upperLeftPanel, upperRightPanel, bottomLeftPanel, bottomRightPanel;
     public Transform shieldObj;
     public static bool leftHandSelected, rightHandSelected;
+    public static GameObject objectToHitBeforeGeneration;
     int weaponPanelLayerMask;
     Ray ray;
     RaycastHit hit;
