@@ -35,7 +35,7 @@ public class GeneratedArea : MonoBehaviour
         if(other.tag == "Player")
         {
             shouldStartCounting = true; //Start counting
-            Debug.Log("Agent has exited");
+            Debug.Log("Player has exited");
         }
     }
 
@@ -44,7 +44,7 @@ public class GeneratedArea : MonoBehaviour
         if(other.tag == "Player")
         {
             shouldStartCounting = false;
-            Debug.Log("Colliding with agent");
+            Debug.Log("Colliding with Player");
         }
     }
 }

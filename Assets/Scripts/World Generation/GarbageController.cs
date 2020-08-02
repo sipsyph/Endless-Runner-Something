@@ -18,7 +18,7 @@ public class GarbageController : MonoBehaviour
 
     void DeleteCurrentGarbageControllerChild()
     {
-        if(currentGarbageControllerChildObj.transform.childCount >= 4)
+        if(currentGarbageControllerChildObj.transform.childCount >= 3)
         {
             Destroy(currentGarbageControllerChildObj);
             CreateGarbageControllerChildObj();

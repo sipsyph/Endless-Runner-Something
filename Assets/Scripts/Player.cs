@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public Transform upperLeftPanel, upperRightPanel, bottomLeftPanel, bottomRightPanel;
     public Transform shieldObj;
+
     public static bool leftHandSelected, rightHandSelected;
     public static GameObject objectToHitBeforeGeneration;
     int weaponPanelLayerMask;
@@ -22,6 +23,8 @@ public class Player : MonoBehaviour
     {
         WeaponControls();
         //ToggleWeaponAttackPanels();
+
+
     }
 
     void ToggleWeaponAttackPanels()
