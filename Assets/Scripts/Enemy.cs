@@ -5,11 +5,12 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    int ctr;
+    int ctr, health;
     bool hit;
     // Start is called before the first frame update
     void Start()
     {
+        health = 5;
         ctr=0;
         hit = false;
     }
@@ -18,27 +19,38 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         ResetColorAfterHit();
+        HandleHealthPoints();
     }
 
+    void HandleHealthPoints()
+    {
+        if(health<=0)
+        {
+            transform.gameObject.SetActive(false);
+        }
+    }
     void ResetColorAfterHit()
     {
-                if(hit)
+        if(hit)
         {
             ctr++;
             if(ctr >= 30)
             {
                 ctr = 0;
                 hit = false;
-                EnemyAnimation.PlayIdleAnimation();
+                GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
             }
         }
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        hit = true;
-        //GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        EnemyAnimation.PlayGettingHitAnimation();
-        //Debug.Log("Enemy hit by "+collision.transform.name);
+        if(collision.tag == "Weapon")
+        {
+            Debug.Log("Enemy is hit by weapon");
+            hit = true;
+            health--;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
     }
 }

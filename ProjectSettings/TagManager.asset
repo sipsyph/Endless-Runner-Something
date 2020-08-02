@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Object To Hit Before Generation
   - Enemy
+  - Weapon
   layers:
   - Default
   - TransparentFX
