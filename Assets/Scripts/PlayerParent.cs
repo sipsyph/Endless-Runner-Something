@@ -5,35 +5,59 @@ using UnityEngine;
 public class PlayerParent : MonoBehaviour
 {
 
-    public static Transform currentEnemy;
-    public static bool enemyDetected;
+    public static Transform currentEnemy, playerBodyStatic, playerHeadStatic;
+    public static bool enemyDetected, isAttacking;
 
-    public Transform mainCamera;
+    public static int currentEnemyHealth, attackingModeDurationCtr;
+
+    private bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
+
+    public Transform mainCamera, playerBody, playerHead;
     void Start()
     {
+        playerBodyStatic = playerBody;
+        playerHeadStatic = playerHead;
         enemyDetected = false;
+        hittingLeftAreaBlocker = false;
+        hittingRightAreaBlocker = false;
     }
 
     void Update()
     {
         PlayerControls();
-
-        if(enemyDetected) //if enemy is detected
+        HandleLookingToAndLookingAwayFromEnemy();
+        if(isAttacking)
         {
-            transform.LookAt(new Vector3(currentEnemy.position.x, transform.position.y, currentEnemy.position.z));
+            attackingModeDurationCtr++;
+            if(attackingModeDurationCtr>=80)
+            {
+                attackingModeDurationCtr = 0;
+                isAttacking = false;
+            }
+        }
+        //Debug.Log("Player is attacking "+isAttacking+" ctr: "+attackingModeDurationCtr+"im a fking genius");
+    }
+
+    void HandleLookingToAndLookingAwayFromEnemy()
+    {
+        if(enemyDetected)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentEnemy.transform.position - transform.position), 10 * Time.deltaTime);
+
             mainCamera.localPosition = new Vector3(0, mainCamera.localPosition.y, mainCamera.localPosition.z);
-            if(!currentEnemy.gameObject.activeSelf)
+            if(!currentEnemy.gameObject.activeSelf) //If enemy has died, note: enemy's gameObject=false is defined as enemy=dead for now
             {
                 enemyDetected = false;
-                
             }
-        }else{
-            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*10);
+
             ConstantForwardMovement();
             //mainCamera.position = new Vector3(-0.8361113f, mainCamera.position.y, mainCamera.position.z);
         }
     }
-
     void ConstantForwardMovement()
     {
         transform.Translate(Vector3.forward * Time.deltaTime);
@@ -42,14 +66,24 @@ public class PlayerParent : MonoBehaviour
 
     void PlayerControls()
     {
-        if (Input.GetButton (""+KeyCode.A)){
-            PlayerAnimation.PlayLeftMoveAnimation();
-            transform.Translate(Vector3.left * Time.deltaTime);
+        if(!hittingLeftAreaBlocker)
+        {
+            if (Input.GetButton (""+KeyCode.A))
+            {
+                PlayerAnimation.PlayLeftMoveAnimation();
+                transform.Translate(Vector3.left * Time.deltaTime);
+            }
         }
-        if (Input.GetButton (""+KeyCode.D)){
-            PlayerAnimation.PlayRightMoveAnimation();
-            transform.Translate(Vector3.right * Time.deltaTime);
+
+        if(!hittingRightAreaBlocker)
+        {
+            if (Input.GetButton (""+KeyCode.D))
+            {
+                PlayerAnimation.PlayRightMoveAnimation();
+                transform.Translate(Vector3.right * Time.deltaTime);
+            }
         }
+
         if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D))
         {
             PlayerAnimation.PlayIdleAnimation();
@@ -57,5 +91,30 @@ public class PlayerParent : MonoBehaviour
         
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+        if(collision.name == "Left Area Blocker")
+        {
+            hittingLeftAreaBlocker = true;
+        }
+
+        if(collision.name == "Right Area Blocker")
+        {
+            hittingRightAreaBlocker = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if(collision.name == "Left Area Blocker")
+        {
+            hittingLeftAreaBlocker = false;
+        }
+
+        if(collision.name == "Right Area Blocker")
+        {
+            hittingRightAreaBlocker = false;
+        }
+    }
     
 }

@@ -12,22 +12,19 @@ public class HitterObject : MonoBehaviour
     }
     private void OnTriggerEnter(Collider collision)
     {
-
-        Debug.Log("Hitter object colliding with "+collision.name);
-
         if(collision.tag == "Object To Hit Before Generation")
         {
-            Debug.Log("To Hit B4 Generate is HIT! HITDASLADJSALKDASJ");
+            Debug.Log("To Hit B4 Generate is HIT! A new area will now be generated in front of player");
             
             Instantiate(areaInstancePrefab, new Vector3(collision.transform.parent.position.x, 0, collision.transform.parent.position.z +105f), collision.transform.parent.rotation);
             
         }
 
-        if(collision.tag == "Enemy")
-        {
-            Debug.Log("Enemy detected");
-            PlayerParent.currentEnemy = collision.transform;
-            PlayerParent.enemyDetected = true;
-        }
+        // if(collision.tag == "Enemy")
+        // {
+        //     Debug.Log("Enemy detected");
+        //     PlayerParent.currentEnemy = collision.transform;
+        //     PlayerParent.enemyDetected = true;
+        // }
     }
 }

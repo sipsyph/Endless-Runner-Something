@@ -7,13 +7,17 @@ public class Player : MonoBehaviour
     public Transform upperLeftPanel, upperRightPanel, bottomLeftPanel, bottomRightPanel;
     public Transform shieldObj;
 
-    public static bool leftHandSelected, rightHandSelected;
+    public static bool leftHandSelected, rightHandSelected, playerGotHit;
+
+    public static int playerHealth = 10;
     public static GameObject objectToHitBeforeGeneration;
     int weaponPanelLayerMask;
     Ray ray;
     RaycastHit hit;
     void Start()
     {
+        playerHealth = 10;
+        playerGotHit = false;
         weaponPanelLayerMask = LayerMask.GetMask("Weapon Panel");
         rightHandSelected = true;
         leftHandSelected = true;
@@ -21,7 +25,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        WeaponControls();
+        //WeaponControls();
         //ToggleWeaponAttackPanels();
 
 
