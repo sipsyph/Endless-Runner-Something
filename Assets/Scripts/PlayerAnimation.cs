@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-public static Animator playerAnimator;
-public static string[] triggerNames;
+public static Animator playerAnimator, playerParentAnimator;
+public static string[] triggerNames, triggerNamesForPlayerParent;
 
-public Animator pubPlayerAnimator;
+public Animator pubPlayerAnimator, pubPlayerParentAnimator;
 
     void Start()
     {
         playerAnimator = pubPlayerAnimator;
+        playerParentAnimator = pubPlayerParentAnimator;
         triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger"};
+        triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger"};
     }
 
     public static void PlayLeftMoveAnimation()
@@ -34,6 +36,26 @@ public Animator pubPlayerAnimator;
         playerAnimator.SetTrigger("IdleTrigger");
     }
 
+    //==============================================//
+    public static void PlaySlideAnimation()
+    {
+        ResetTriggerForParentExcept("SlideTrigger");
+        playerParentAnimator.SetTrigger("SlideTrigger");
+    }
+
+    public static void PlayJumpAnimation()
+    {
+        ResetTriggerForParentExcept("JumpTrigger");
+        playerParentAnimator.SetTrigger("JumpTrigger");
+    }
+
+    public static void PlayWalkAnimation()
+    {
+        ResetTriggerForParentExcept("WalkTrigger");
+        playerParentAnimator.SetTrigger("WalkTrigger");
+    }
+
+
     public static void ResetTriggerExcept(string triggerName)
     {
 
@@ -42,7 +64,19 @@ public Animator pubPlayerAnimator;
             if(!triggerName.Equals(triggerNames[i]))
             {
                 playerAnimator.ResetTrigger(triggerNames[i]);
-                //Debug.Log("Resetting Trigger: "+triggerNames[i]);
+            }
+        }
+
+    }
+
+    public static void ResetTriggerForParentExcept(string triggerName)
+    {
+
+        for(int i=0; i<triggerNamesForPlayerParent.Length;i++)
+        {
+            if(!triggerNamesForPlayerParent.Equals(triggerNamesForPlayerParent[i]))
+            {
+                playerParentAnimator.ResetTrigger(triggerNamesForPlayerParent[i]);
             }
         }
 

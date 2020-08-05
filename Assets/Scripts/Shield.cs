@@ -7,16 +7,20 @@ public class Shield : MonoBehaviour
     private Vector2 deltaPos;
     private CharacterController controllerPlayer;
 
-    private bool isHittingBorder;
-    private int ctr;
+    public GameObject shieldModel;
+
+    private bool isHittingBorder, hit;
+    private int ctr, changeColorCtr;
     void Start()
     {
+        hit = false;
         controllerPlayer = GetComponent<CharacterController>();
     }
     void Update () 
     {
         TouchJoystickControl();
         BandAidFixToShieldGettingOutOfBorders();
+        ResetColorAfterHit();
     }
 
     void TouchJoystickControl()
@@ -30,7 +34,7 @@ public class Shield : MonoBehaviour
         transform.localPosition = new Vector3 (
             this.transform.localPosition.x, 
             this.transform.localPosition.y, 
-            -8.35f);
+            -8.573f);
     }
 
     void BandAidFixToShieldGettingOutOfBorders()
@@ -44,7 +48,7 @@ public class Shield : MonoBehaviour
                     transform.localPosition, new Vector3(
                         -0.9439999f,
                         0.993f,
-                        -8.44f),
+                        -8.573f),
                     20f * Time.deltaTime);
             }
             else
@@ -55,6 +59,29 @@ public class Shield : MonoBehaviour
         else
         {
             ctr=0;
+        }
+    }
+
+    void ResetColorAfterHit()
+    {
+        if(hit)
+        {
+            changeColorCtr++;
+            if(changeColorCtr >= 20)
+            {
+                changeColorCtr = 0;
+                hit = false;
+                //shieldModel.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if(collision.tag == "Projectile")
+        {
+            hit = true;
+            //shieldModel.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
     }
 

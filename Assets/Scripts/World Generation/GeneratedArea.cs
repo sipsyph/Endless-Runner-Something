@@ -35,6 +35,7 @@ public class GeneratedArea : MonoBehaviour
         if(other.tag == "Player")
         {
             shouldStartCounting = true; //Start counting
+            PlayerParent.isJumping = true;
             Debug.Log("Player has exited");
         }
     }
@@ -43,8 +44,11 @@ public class GeneratedArea : MonoBehaviour
     {
         if(other.tag == "Player")
         {
+            counter=0;
             shouldStartCounting = false;
-            Debug.Log("Colliding with Player");
+            PlayerParent.isJumping = false;
+            PlayerAnimation.PlayWalkAnimation();
+            Debug.Log("Staying with Player");
         }
     }
 }

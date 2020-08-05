@@ -15,7 +15,7 @@ public class ObjectToHitBeforeGeneration : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            this.transform.gameObject.SetActive(false);
+            //this.transform.gameObject.SetActive(false);
         }
     }
 }

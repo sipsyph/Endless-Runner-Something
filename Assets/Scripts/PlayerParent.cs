@@ -6,26 +6,43 @@ public class PlayerParent : MonoBehaviour
 {
 
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic;
-    public static bool enemyDetected, isAttacking;
+    public static bool enemyDetected, isAttacking, isJumping;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
-    private bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
+    private bool hittingLeftAreaBlocker, hittingRightAreaBlocker, isSliding;
 
     public Transform mainCamera, playerBody, playerHead;
+
+    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier;
+    private int slideCtr;
+    private float actualSpeed;
     void Start()
     {
+        slideCtr = 0;
         playerBodyStatic = playerBody;
         playerHeadStatic = playerHead;
         enemyDetected = false;
         hittingLeftAreaBlocker = false;
         hittingRightAreaBlocker = false;
+        actualSpeed = baseMovementSpeed;
     }
 
     void Update()
     {
         PlayerControls();
         HandleLookingToAndLookingAwayFromEnemy();
+        HandleAttackModeStates();
+        
+    }
+
+    void PlayerReaction()
+    {
+
+    }
+
+    void HandleAttackModeStates()
+    {
         if(isAttacking)
         {
             attackingModeDurationCtr++;
@@ -37,7 +54,6 @@ public class PlayerParent : MonoBehaviour
         }
         //Debug.Log("Player is attacking "+isAttacking+" ctr: "+attackingModeDurationCtr+"im a fking genius");
     }
-
     void HandleLookingToAndLookingAwayFromEnemy()
     {
         if(enemyDetected)
@@ -60,36 +76,65 @@ public class PlayerParent : MonoBehaviour
     }
     void ConstantForwardMovement()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime);
+        transform.Translate(Vector3.forward * Time.deltaTime * actualSpeed);
     }
-
 
     void PlayerControls()
     {
+        //Moving Left
         if(!hittingLeftAreaBlocker)
         {
             if (Input.GetButton (""+KeyCode.A))
             {
                 PlayerAnimation.PlayLeftMoveAnimation();
                 transform.Translate(Vector3.left * Time.deltaTime);
+                actualSpeed = baseMovementSpeed;
             }
         }
 
+        //Moving Right
         if(!hittingRightAreaBlocker)
         {
             if (Input.GetButton (""+KeyCode.D))
             {
                 PlayerAnimation.PlayRightMoveAnimation();
                 transform.Translate(Vector3.right * Time.deltaTime);
+                actualSpeed = baseMovementSpeed;
             }
         }
 
         if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D))
         {
             PlayerAnimation.PlayIdleAnimation();
+            actualSpeed = baseMovementSpeed;
         }
-        
+
+        //Jumping
+        if(Input.GetButton(""+KeyCode.C) && !isJumping){
+            PlayerAnimation.PlayJumpAnimation();
+        }
+        if(isJumping)
+        {
+            actualSpeed = baseMovementSpeed * jumpSpeedMultiplier; 
+        }
+
+        //Sliding
+        if(Input.GetButton(""+KeyCode.V) && !isJumping){
+            PlayerAnimation.PlaySlideAnimation();
+            isSliding = true;
+        }
+        if(isSliding)
+        {
+            actualSpeed = baseMovementSpeed * slideSpeedMultiplier;
+            slideCtr++;
+            if(slideCtr>80)
+            {
+                slideCtr = 0;
+                isSliding = false;
+            }
+        }
     }
+
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -101,6 +146,11 @@ public class PlayerParent : MonoBehaviour
         if(collision.name == "Right Area Blocker")
         {
             hittingRightAreaBlocker = true;
+        }
+
+        if(collision.tag == "Projectile")
+        {
+            Debug.Log("Hit by arrow");
         }
     }
 
@@ -117,4 +167,5 @@ public class PlayerParent : MonoBehaviour
         }
     }
     
+
 }

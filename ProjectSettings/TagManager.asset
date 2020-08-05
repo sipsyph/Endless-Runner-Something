@@ -9,6 +9,8 @@ TagManager:
   - Weapon
   - Area Blocker
   - Shield Movement Border
+  - Projectile
+  - Shield
   layers:
   - Default
   - TransparentFX
@@ -18,13 +20,13 @@ TagManager:
   - UI
   - 
   - 
-  - Weapon Panel
+  - 
   - Object To Hit Before Generation
   - Player
   - Shield
   - Shield Border
-  - 
-  - 
+  - Projectile
+  - Detection Radius
   - 
   - 
   - 
