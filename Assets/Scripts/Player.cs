@@ -8,14 +8,14 @@ public class Player : MonoBehaviour
 
     public static bool leftHandSelected, rightHandSelected, playerGotHit;
 
-    public static int playerHealth = 10;
+    public static int playerHealth = 1000;
     public static GameObject objectToHitBeforeGeneration;
     int weaponPanelLayerMask;
     Ray ray;
     RaycastHit hit;
     void Start()
     {
-        playerHealth = 10;
+        playerHealth = 1000;
         playerGotHit = false;
         weaponPanelLayerMask = LayerMask.GetMask("Weapon Panel");
         rightHandSelected = true;

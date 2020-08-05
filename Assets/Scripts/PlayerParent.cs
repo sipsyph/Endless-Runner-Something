@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class PlayerParent : MonoBehaviour
 {
-
-    public static Transform currentEnemy, playerBodyStatic, playerHeadStatic;
+    public Transform mainCamera, playerBody, playerHead;
+    public GameObject projectileIncomingIndicator;
+    public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
+    public static GameObject projectileIncomingIndicatorStatic;
     public static bool enemyDetected, isAttacking, isJumping;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
-    private bool hittingLeftAreaBlocker, hittingRightAreaBlocker, isSliding;
+    private bool isSliding;
 
-    public Transform mainCamera, playerBody, playerHead;
+    public static bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
+
+    
 
     public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier;
     private int slideCtr;
@@ -20,6 +24,7 @@ public class PlayerParent : MonoBehaviour
     void Start()
     {
         slideCtr = 0;
+        projectileIncomingIndicatorStatic = projectileIncomingIndicator;
         playerBodyStatic = playerBody;
         playerHeadStatic = playerHead;
         enemyDetected = false;
@@ -63,6 +68,7 @@ public class PlayerParent : MonoBehaviour
             mainCamera.localPosition = new Vector3(0, mainCamera.localPosition.y, mainCamera.localPosition.z);
             if(!currentEnemy.gameObject.activeSelf) //If enemy has died, note: enemy's gameObject=false is defined as enemy=dead for now
             {
+                projectileIncomingIndicatorStatic.SetActive(false);
                 enemyDetected = false;
             }
         }
@@ -136,36 +142,39 @@ public class PlayerParent : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider collision)
-    {
-        if(collision.name == "Left Area Blocker")
-        {
-            hittingLeftAreaBlocker = true;
-        }
+    // private void OnTriggerEnter(Collider collision)
+    // {
+    //     if(collision.name == "Left Area Blocker")
+    //     {
+    //         hittingLeftAreaBlocker = true;
+    //     }
 
-        if(collision.name == "Right Area Blocker")
-        {
-            hittingRightAreaBlocker = true;
-        }
+    //     if(collision.name == "Right Area Blocker")
+    //     {
+    //         hittingRightAreaBlocker = true;
+    //     }
 
-        if(collision.tag == "Projectile")
-        {
-            Debug.Log("Hit by arrow");
-        }
-    }
+    //     if(collision.tag == "Projectile")
+    //     {
+    //         Debug.Log("Hit by arrow");
+    //         Player.playerHealth--;
+    //         Player.playerGotHit = true;
+    //     }
+    // }
 
-    private void OnTriggerExit(Collider collision)
-    {
-        if(collision.name == "Left Area Blocker")
-        {
-            hittingLeftAreaBlocker = false;
-        }
 
-        if(collision.name == "Right Area Blocker")
-        {
-            hittingRightAreaBlocker = false;
-        }
-    }
+    // private void OnTriggerExit(Collider collision)
+    // {
+    //     if(collision.name == "Left Area Blocker")
+    //     {
+    //         hittingLeftAreaBlocker = false;
+    //     }
+
+    //     if(collision.name == "Right Area Blocker")
+    //     {
+    //         hittingRightAreaBlocker = false;
+    //     }
+    // }
     
 
 }

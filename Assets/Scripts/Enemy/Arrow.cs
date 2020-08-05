@@ -26,7 +26,7 @@ public class Arrow : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(myBody.velocity);
         }else{
             ctr++;
-            if(ctr>=120)
+            if(ctr>=60)
             {
                 ctr = 0;
                 this.transform.gameObject.SetActive(false);
@@ -41,9 +41,11 @@ public class Arrow : MonoBehaviour
         
         if(col.collider.tag != "Projectile")
         {
+            GetComponent<Collider>().enabled = false;
             hitSomething = true;
             this.transform.parent = col.transform;
             myBody.constraints = RigidbodyConstraints.FreezeAll;
+            Debug.Log("Arrow hit "+col.transform.name);
         }
     }
 }

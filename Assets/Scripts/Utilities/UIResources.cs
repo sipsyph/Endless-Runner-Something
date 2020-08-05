@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIResources : MonoBehaviour
 {
-    public static string health = "Health: ";
+    public static string health = "HP: ";
     void Start()
     {
         

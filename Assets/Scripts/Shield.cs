@@ -10,9 +10,12 @@ public class Shield : MonoBehaviour
     public GameObject shieldModel;
 
     private bool isHittingBorder, hit;
+
+    public static bool shieldBlocked;
     private int ctr, changeColorCtr;
     void Start()
     {
+        shieldBlocked = false;
         hit = false;
         controllerPlayer = GetComponent<CharacterController>();
     }
@@ -20,7 +23,7 @@ public class Shield : MonoBehaviour
     {
         TouchJoystickControl();
         BandAidFixToShieldGettingOutOfBorders();
-        ResetColorAfterHit();
+        //ResetColorAfterHit();
     }
 
     void TouchJoystickControl()
@@ -82,6 +85,23 @@ public class Shield : MonoBehaviour
         {
             hit = true;
             //shieldModel.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
+
+        if(collision.tag == "Enemy Weapon")
+        {
+            PlayerCollision.playerInvulnerable = true;
+            shieldBlocked = true;
+            shieldModel.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+
+        if(collision.tag == "Enemy Weapon")
+        {
+            shieldBlocked = false;
+            shieldModel.GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
         }
     }
 

@@ -11,6 +11,7 @@ TagManager:
   - Shield Movement Border
   - Projectile
   - Shield
+  - Enemy Weapon
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Shield Border
   - Projectile
   - Detection Radius
-  - 
+  - Enemy Weapon
   - 
   - 
   - 
