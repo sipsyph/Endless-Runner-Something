@@ -49,7 +49,6 @@ public class ShootArrow : MonoBehaviour
     private float DetermineTargetSlot()
     {
         int randNum = Random.Range(1,100);
-        Debug.Log("Random number is "+randNum);
         if(randNum>=1 && randNum<=33)
         {
             PlayerParent.projectileIncomingIndicatorStatic.transform.localPosition = new Vector3(

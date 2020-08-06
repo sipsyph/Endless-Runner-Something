@@ -12,6 +12,7 @@ TagManager:
   - Projectile
   - Shield
   - Enemy Weapon
+  - Player Hitbox
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Projectile
   - Detection Radius
   - Enemy Weapon
-  - 
+  - Player Attack Range
   - 
   - 
   - 

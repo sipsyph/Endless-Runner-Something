@@ -8,7 +8,7 @@ public class PlayerParent : MonoBehaviour
     public GameObject projectileIncomingIndicator;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
-    public static bool enemyDetected, isAttacking, isJumping;
+    public static bool enemyDetected, isAttacking, isJumping, isInAttackRange;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
@@ -63,21 +63,29 @@ public class PlayerParent : MonoBehaviour
     {
         if(enemyDetected)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentEnemy.transform.position - transform.position), 10 * Time.deltaTime);
-
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentEnemy.transform.position - transform.position), 5 * Time.deltaTime);
             mainCamera.localPosition = new Vector3(0, mainCamera.localPosition.y, mainCamera.localPosition.z);
+
+            Debug.Log("Player in range "+isInAttackRange);
+            if(!isInAttackRange)
+            {
+                Debug.Log("Player not in range");
+                ConstantForwardMovement();
+            }
+
             if(!currentEnemy.gameObject.activeSelf) //If enemy has died, note: enemy's gameObject=false is defined as enemy=dead for now
             {
                 projectileIncomingIndicatorStatic.SetActive(false);
                 enemyDetected = false;
+                isInAttackRange = false;
             }
         }
         else
         {
+            
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*10);
 
             ConstantForwardMovement();
-            //mainCamera.position = new Vector3(-0.8361113f, mainCamera.position.y, mainCamera.position.z);
         }
     }
     void ConstantForwardMovement()
@@ -140,41 +148,6 @@ public class PlayerParent : MonoBehaviour
             }
         }
     }
-
-
-    // private void OnTriggerEnter(Collider collision)
-    // {
-    //     if(collision.name == "Left Area Blocker")
-    //     {
-    //         hittingLeftAreaBlocker = true;
-    //     }
-
-    //     if(collision.name == "Right Area Blocker")
-    //     {
-    //         hittingRightAreaBlocker = true;
-    //     }
-
-    //     if(collision.tag == "Projectile")
-    //     {
-    //         Debug.Log("Hit by arrow");
-    //         Player.playerHealth--;
-    //         Player.playerGotHit = true;
-    //     }
-    // }
-
-
-    // private void OnTriggerExit(Collider collision)
-    // {
-    //     if(collision.name == "Left Area Blocker")
-    //     {
-    //         hittingLeftAreaBlocker = false;
-    //     }
-
-    //     if(collision.name == "Right Area Blocker")
-    //     {
-    //         hittingRightAreaBlocker = false;
-    //     }
-    // }
     
 
 }

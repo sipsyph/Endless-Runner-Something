@@ -20,12 +20,5 @@ public class HitterObject : MonoBehaviour
             areaInstancePrefab.transform.position = new Vector3(collision.transform.parent.position.x, 0, collision.transform.parent.position.z +105f);
 
         }
-
-        // if(collision.tag == "Enemy")
-        // {
-        //     Debug.Log("Enemy detected");
-        //     PlayerParent.currentEnemy = collision.transform;
-        //     PlayerParent.enemyDetected = true;
-        // }
     }
 }

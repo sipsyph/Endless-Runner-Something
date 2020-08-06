@@ -18,17 +18,18 @@ public class Obstacle : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if(collision.tag == "Player")
+        if(collision.tag == "Player Hitbox")
         {
             Player.playerGotHit = true;
-            Player.playerHealth-=damageDealtToPlayer;
+            Debug.Log("PLAYER HIT OBSTACLE "+this.transform.name);
         }
     }
 
     private void OnTriggerExit(Collider collision)
     {
-        if(collision.tag == "Player")
+        if(collision.tag == "Player Hitbox")
         {
+            Player.playerHealth-=damageDealtToPlayer;
             Player.playerGotHit = false;
         }
     }

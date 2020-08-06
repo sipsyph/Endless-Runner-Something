@@ -39,12 +39,10 @@ public class Canvas : MonoBehaviour
                 enemyNameText.text = PlayerParent.currentEnemy.gameObject.name;
                 enemyHealthText.text = PlayerParent.currentEnemyHealth.ToString();
             }
-            else
-            {
+        }else{
                 enemyNameText.text = "";
                 enemyHealthText.text = "";
                 return;
-            }
         }
     }
 
