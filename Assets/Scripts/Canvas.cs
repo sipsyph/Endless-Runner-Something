@@ -23,11 +23,8 @@ public class Canvas : MonoBehaviour
 
     void UpdatePlayerHealthText()
     {
-        if(Player.playerGotHit)
-        {
-            Debug.Log("Health text being updated...");
-            healthText.text = UIResources.health + Player.playerHealth.ToString();
-        }
+        Debug.Log("Health text being updated...");
+        healthText.text = UIResources.health + Player.playerHealth.ToString();
     }
 
     void UpdateCurrentEnemyUI()

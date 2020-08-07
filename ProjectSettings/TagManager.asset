@@ -30,8 +30,8 @@ TagManager:
   - Projectile
   - Detection Radius
   - Enemy Weapon
-  - Player Attack Range
-  - 
+  - Node On Exit
+  - Player Hit Box
   - 
   - 
   - 

@@ -20,8 +20,17 @@ public class Obstacle : MonoBehaviour
     {
         if(collision.tag == "Player Hitbox")
         {
-            Player.playerGotHit = true;
+            if(this.transform.name.Contains("Jump"))
+            {
+                Player.playerGotHitByJumpWall = true;
+            }
+            else if(this.transform.name.Contains("Slide"))
+            {
+                Player.playerGotHitBySlideWall = true;
+            }
+            
             Debug.Log("PLAYER HIT OBSTACLE "+this.transform.name);
+            
         }
     }
 
@@ -30,7 +39,7 @@ public class Obstacle : MonoBehaviour
         if(collision.tag == "Player Hitbox")
         {
             Player.playerHealth-=damageDealtToPlayer;
-            Player.playerGotHit = false;
+            //Player.playerGotHit = false;
         }
     }
 }

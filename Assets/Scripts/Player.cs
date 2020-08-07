@@ -6,28 +6,49 @@ public class Player : MonoBehaviour
 {
     public Transform shieldObj;
 
-    public static bool leftHandSelected, rightHandSelected, playerGotHit;
+    public static bool playerGotHit, playerGotHitBySlideWall, playerGotHitByJumpWall;
 
     public static int playerHealth = 1000;
     public static GameObject objectToHitBeforeGeneration;
     int weaponPanelLayerMask;
     Ray ray;
     RaycastHit hit;
+
+    private int ctr;
     void Start()
     {
+        ctr = 0;
         playerHealth = 1000;
         playerGotHit = false;
-        weaponPanelLayerMask = LayerMask.GetMask("Weapon Panel");
-        rightHandSelected = true;
-        leftHandSelected = true;
     }
 
     void Update()
     {
-        //WeaponControls();
-        //ToggleWeaponAttackPanels();
+        HandleAnimationWhenGettingHitByObstacle();
+    }
 
-
+    void HandleAnimationWhenGettingHitByObstacle()
+    {
+        if(playerGotHitBySlideWall)
+        {
+            PlayerAnimation.PlayHitSlideWallAnimation();
+            ctr++;
+            if(ctr>=60)
+            {
+                ctr = 0;
+                playerGotHitBySlideWall = false;
+            }
+        }
+        if(playerGotHitByJumpWall)
+        {
+            PlayerAnimation.PlayHitJumpWallAnimation();
+            ctr++;
+            if(ctr>=60)
+            {
+                ctr = 0;
+                playerGotHitByJumpWall = false;
+            }
+        }
     }
 
 

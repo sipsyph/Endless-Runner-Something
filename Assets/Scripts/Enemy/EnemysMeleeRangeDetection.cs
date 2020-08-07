@@ -20,7 +20,7 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
         {
             if(!playerInAttackRange)
             {
-                //ConstantForwardMovement();
+                ConstantForwardMovement();
                 Debug.Log("Enemy is adjusting range to get closer");
             }
             else{
@@ -91,7 +91,7 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
             Debug.Log("Player is NOT in attack range");
             if(transform.parent.transform.name.Contains("Melee"))
             {
-                
+                playerInAttackRange = false;
             }else{
                 PlayerParent.isInAttackRange = false;
                 playerInAttackRange = false;

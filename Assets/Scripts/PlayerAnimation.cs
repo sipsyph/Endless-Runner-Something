@@ -14,7 +14,8 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
         playerAnimator = pubPlayerAnimator;
         playerParentAnimator = pubPlayerParentAnimator;
         triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger"};
-        triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger"};
+        triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger",
+        "HitSlideWallTrigger","HitJumpWallTrigger"};
     }
 
     public static void PlayLeftMoveAnimation()
@@ -46,6 +47,7 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
     public static void PlayJumpAnimation()
     {
         ResetTriggerForParentExcept("JumpTrigger");
+        playerParentAnimator.ResetTrigger("JumpTrigger");
         playerParentAnimator.SetTrigger("JumpTrigger");
     }
 
@@ -53,6 +55,18 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
     {
         ResetTriggerForParentExcept("WalkTrigger");
         playerParentAnimator.SetTrigger("WalkTrigger");
+    }
+
+    public static void PlayHitSlideWallAnimation()
+    {
+        ResetTriggerForParentExcept("HitSlideWallTrigger");
+        playerParentAnimator.SetTrigger("HitSlideWallTrigger");
+    }
+
+    public static void PlayHitJumpWallAnimation()
+    {
+        ResetTriggerForParentExcept("HitJumpWallTrigger");
+        playerParentAnimator.SetTrigger("HitJumpWallTrigger");
     }
 
 

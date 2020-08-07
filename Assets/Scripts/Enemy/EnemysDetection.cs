@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class EnemysDetection : MonoBehaviour
 {
-    public GameObject bow;
+    public GameObject bow, meleeRangeDetector;
     private bool playerDetected;
 
     public float movementSpeed, rotationSpeed;
 
-    public int health;
+    private Transform enemyTransform;
+    private string enemyName;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        enemyTransform = transform.parent.transform;
+        enemyName = enemyTransform.name;
+        movementSpeed = 1f;
+        rotationSpeed = 1f;
     }
 
     void Update()
@@ -21,9 +26,10 @@ public class EnemysDetection : MonoBehaviour
        if(playerDetected)
        {
             RotateTowardsPlayer();
-            if(transform.parent.transform.name.Contains("Melee")) //Ranged enemies should not run after player
+            if(enemyName.Contains("Melee"))
             {
-                ConstantForwardMovement();
+                //ConstantForwardMovement();
+                meleeRangeDetector.SetActive(true);
             }       
             
        } 
@@ -34,7 +40,7 @@ public class EnemysDetection : MonoBehaviour
         var newRotation = Quaternion.LookRotation(PlayerParent.playerHeadStatic.position - transform.parent.transform.position);
             newRotation.x = 0.0f;
             newRotation.z = 0.0f;
-            transform.parent.transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
+            enemyTransform.rotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
 
     }
 
@@ -42,7 +48,7 @@ public class EnemysDetection : MonoBehaviour
     {
         if(!PlayerParent.enemyDetected)
         {   
-            transform.parent.transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
+            enemyTransform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
         }
     }
 
@@ -51,21 +57,19 @@ public class EnemysDetection : MonoBehaviour
         if(collision.tag == "Player")
         {
             
-            if(transform.parent.transform.name.Contains("Melee"))
+            if(enemyName.Contains("Melee"))
             {
                 
             }else{
                 PlayerParent.enemyDetected = true;
                 bow.SetActive(true);
             }
-            //PlayerParent.activatedEnemy = transform.parent.transform;
-            PlayerParent.currentEnemyHealth = health;
-            PlayerParent.currentEnemy = this.transform.parent.transform;
+            PlayerParent.currentEnemy = enemyTransform;
             
-            EnemyAnimation.enemyAnimator = transform.parent.transform.gameObject.GetComponent<Animator>();
+            EnemyAnimation.enemyAnimator = enemyTransform.gameObject.GetComponent<Animator>();
             //Debug.Log("Current Enemy animator: "+EnemyAnimation.enemyAnimator.name);
             playerDetected = true;
-            Debug.Log(transform.parent.transform.name+" has detected player");
+            //Debug.Log(transform.parent.transform.name+" has detected player");
         }
     }
 
@@ -73,16 +77,19 @@ public class EnemysDetection : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
+            //When this occurs, it should mean that the player ran away from the enemy
+            //without getting locked on to it
             Debug.Log("Player has left enemy detection");
-            if(transform.parent.transform.name.Contains("Melee"))
+            if(enemyName.Contains("Melee"))
             {
-
+                meleeRangeDetector.SetActive(false);
             }else{
                 bow.SetActive(false);
                 PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
 
             }
             playerDetected = false;
+            enemyTransform.gameObject.SetActive(false);
         }
     }
     

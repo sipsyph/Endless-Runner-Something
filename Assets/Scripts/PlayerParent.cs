@@ -8,18 +8,13 @@ public class PlayerParent : MonoBehaviour
     public GameObject projectileIncomingIndicator;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
-    public static bool enemyDetected, isAttacking, isJumping, isInAttackRange;
+    public static bool enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
-    private bool isSliding;
-
     public static bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
-
-    
-
-    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier;
-    private int slideCtr;
+    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, speed;
+    private int slideCtr, jumpCtr;
     private float actualSpeed;
     void Start()
     {
@@ -31,6 +26,7 @@ public class PlayerParent : MonoBehaviour
         hittingLeftAreaBlocker = false;
         hittingRightAreaBlocker = false;
         actualSpeed = baseMovementSpeed;
+        speed = actualSpeed;
     }
 
     void Update()
@@ -120,16 +116,33 @@ public class PlayerParent : MonoBehaviour
         if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D))
         {
             PlayerAnimation.PlayIdleAnimation();
-            actualSpeed = baseMovementSpeed;
+            
         }
 
         //Jumping
-        if(Input.GetButton(""+KeyCode.C) && !isJumping){
+        if(Input.GetButton(""+KeyCode.C)){
             PlayerAnimation.PlayJumpAnimation();
+            isJumping = true;
         }
         if(isJumping)
         {
-            actualSpeed = baseMovementSpeed * jumpSpeedMultiplier; 
+            speed = actualSpeed = baseMovementSpeed * jumpSpeedMultiplier;
+            jumpCtr++;
+            if(jumpCtr>30)
+            {
+                if(jumpCtr>6)
+                {
+                    speed = actualSpeed = baseMovementSpeed;
+                }
+                jumpCtr = 0;
+                isJumping = false;
+                
+                PlayerAnimation.PlayWalkAnimation();
+            }
+        }
+        else
+        {
+            jumpCtr = 0;
         }
 
         //Sliding
@@ -139,12 +152,14 @@ public class PlayerParent : MonoBehaviour
         }
         if(isSliding)
         {
-            actualSpeed = baseMovementSpeed * slideSpeedMultiplier;
+            speed = actualSpeed = baseMovementSpeed * slideSpeedMultiplier;
             slideCtr++;
-            if(slideCtr>80)
+            if(slideCtr>45)
             {
                 slideCtr = 0;
                 isSliding = false;
+                speed = actualSpeed = baseMovementSpeed;
+                PlayerAnimation.PlayWalkAnimation();
             }
         }
     }
