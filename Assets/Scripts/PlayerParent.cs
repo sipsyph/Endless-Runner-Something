@@ -8,7 +8,7 @@ public class PlayerParent : MonoBehaviour
     public GameObject projectileIncomingIndicator;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
-    public static bool enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding;
+    public static bool enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, currentEnemyIsDead;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 

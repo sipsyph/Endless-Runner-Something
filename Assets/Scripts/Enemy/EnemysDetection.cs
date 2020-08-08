@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemysDetection : MonoBehaviour
 {
     public GameObject bow, meleeRangeDetector;
-    private bool playerDetected;
+    private bool playerDetected, enemyIsMelee;
 
     public float movementSpeed, rotationSpeed;
 
@@ -17,22 +17,33 @@ public class EnemysDetection : MonoBehaviour
     {
         enemyTransform = transform.parent.transform;
         enemyName = enemyTransform.name;
+        if(enemyName.Contains("Melee"))
+        {
+            enemyIsMelee = true;
+        }
         movementSpeed = 1f;
         rotationSpeed = 1f;
     }
 
     void Update()
     {  
-       if(playerDetected)
-       {
+        HandleEnemyDeath(); 
+        if(playerDetected && (!isEnemyDead()))
+        {
             RotateTowardsPlayer();
-            if(enemyName.Contains("Melee"))
+            if(enemyIsMelee)
             {
                 //ConstantForwardMovement();
                 meleeRangeDetector.SetActive(true);
             }       
             
-       } 
+        }
+       
+    }
+
+    bool isEnemyDead()
+    {
+        return (PlayerParent.currentEnemy == enemyTransform && PlayerParent.currentEnemyIsDead);
     }
 
     void RotateTowardsPlayer()
@@ -52,12 +63,29 @@ public class EnemysDetection : MonoBehaviour
         }
     }
 
+    void HandleEnemyDeath()
+    {
+        if(isEnemyDead())
+        {
+            if(enemyIsMelee)
+            {
+                Debug.Log("Entered Enemy isMelee code DEAATH");
+                meleeRangeDetector.SetActive(false);
+            }else{
+                bow.SetActive(false);
+                PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
+            }
+            Debug.Log("Entered Enemy Death code");
+            enemyTransform.gameObject.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider collision)
     {
         if(collision.tag == "Player")
         {
             
-            if(enemyName.Contains("Melee"))
+            if(enemyIsMelee)
             {
                 
             }else{
@@ -80,7 +108,7 @@ public class EnemysDetection : MonoBehaviour
             //When this occurs, it should mean that the player ran away from the enemy
             //without getting locked on to it
             Debug.Log("Player has left enemy detection");
-            if(enemyName.Contains("Melee"))
+            if(enemyIsMelee)
             {
                 meleeRangeDetector.SetActive(false);
             }else{

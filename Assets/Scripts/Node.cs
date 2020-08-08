@@ -8,12 +8,22 @@ public class Node : MonoBehaviour
     Transform thisNode;
 
     Transform[] allChildren;
-    List<Transform> allObstacles;
+    List<Transform> allObstacles, allEnemies;
     private int randNum;
+
+    private bool isEnemyNode;
     void Start()
     {
+
         thisNode = transform.parent.transform;
+        if(thisNode.name.Contains("Enemy"))
+        {
+            isEnemyNode = true;
+        }else{
+            isEnemyNode = false;
+        }
         allObstacles = new List<Transform>();
+        allEnemies = new List<Transform>();
         RandomizeObstacleObjectsInThisNode();
     }
 
@@ -25,10 +35,7 @@ public class Node : MonoBehaviour
 
     void RandomizeObstacleObjectsInThisNode()
     {
-        
-        allChildren = thisNode.GetComponentsInChildren<Transform>(true); //GetComponentsInChildren's boolean parameter is U S E L E S S
-        //Debug.Log("ALL CHILDREN COUNT: "+allChildren.Length);
-        
+        allChildren = thisNode.GetComponentsInChildren<Transform>(true);
 
         foreach(Transform child in allChildren)
         {
@@ -39,16 +46,39 @@ public class Node : MonoBehaviour
                 allObstacles.Add(child);
             }
         }
-
         Debug.Log("OBSTACLE COUNT: "+allObstacles.Count);
         randNum = Random.Range(0,allObstacles.Count);
         allObstacles[randNum].gameObject.SetActive(true);
         Debug.Log("Chosen OBSTACLE: "+allObstacles[randNum].name);
     }
 
+    void RandomizeEnemySpawnInThisNode()
+    {
+        allChildren = thisNode.GetComponentsInChildren<Transform>(true);
+
+        foreach(Transform child in allChildren)
+        {
+            if(child.tag == "Enemy")
+            {
+                Debug.Log("Enemy in Node "+thisNode.name+":"+child.name);
+                child.gameObject.SetActive(false);
+                allEnemies.Add(child);
+            }
+        }
+        Debug.Log("ENEMY COUNT: "+allEnemies.Count);
+        randNum = Random.Range(0,allEnemies.Count);
+        allEnemies[randNum].gameObject.SetActive(true);
+        Debug.Log("Chosen ENEMY: "+allEnemies[randNum].name);
+    }
     void ResetNode()
     {
-        RandomizeObstacleObjectsInThisNode();
+        if(isEnemyNode)
+        {
+            //RandomizeEnemySpawnInThisNode();
+        }else{
+            RandomizeObstacleObjectsInThisNode();
+        }
+        
         this.transform.parent.gameObject.SetActive(false);
     }
 

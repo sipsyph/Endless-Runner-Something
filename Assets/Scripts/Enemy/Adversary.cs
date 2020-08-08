@@ -25,8 +25,11 @@ public class Adversary : MonoBehaviour
     {
         if(health<=0)
         {
-
-            transform.gameObject.SetActive(false);
+            if(PlayerParent.currentEnemy == this.transform)
+            {
+                PlayerParent.currentEnemyIsDead = true;
+            }
+            //transform.gameObject.SetActive(false);
         }
     }
     void ResetColorAfterHit()
