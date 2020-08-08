@@ -66,7 +66,13 @@ public class Node : MonoBehaviour
             }
         }
         Debug.Log("ENEMY COUNT: "+allEnemies.Count);
-        randNum = Random.Range(0,allEnemies.Count);
+        if(allEnemies.Count<=1)
+        {
+            randNum = 0;
+        }else{
+            randNum = Random.Range(0,allEnemies.Count-1);
+        }
+        
         allEnemies[randNum].gameObject.SetActive(true);
         Debug.Log("Chosen ENEMY: "+allEnemies[randNum].name);
     }
@@ -74,7 +80,7 @@ public class Node : MonoBehaviour
     {
         if(isEnemyNode)
         {
-            //RandomizeEnemySpawnInThisNode();
+            RandomizeEnemySpawnInThisNode();
         }else{
             RandomizeObstacleObjectsInThisNode();
         }

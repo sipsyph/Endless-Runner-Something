@@ -33,20 +33,22 @@ public class Player : MonoBehaviour
         {
             PlayerAnimation.PlayHitSlideWallAnimation();
             ctr++;
-            if(ctr>=60)
+            if(ctr>=30)
             {
                 ctr = 0;
                 playerGotHitBySlideWall = false;
+                PlayerAnimation.PlayWalkAnimation();
             }
         }
         if(playerGotHitByJumpWall)
         {
             PlayerAnimation.PlayHitJumpWallAnimation();
             ctr++;
-            if(ctr>=60)
+            if(ctr>=30)
             {
                 ctr = 0;
                 playerGotHitByJumpWall = false;
+                PlayerAnimation.PlayWalkAnimation();
             }
         }
     }

@@ -33,7 +33,6 @@ public class EnemysDetection : MonoBehaviour
             RotateTowardsPlayer();
             if(enemyIsMelee)
             {
-                //ConstantForwardMovement();
                 meleeRangeDetector.SetActive(true);
             }       
             
@@ -76,6 +75,7 @@ public class EnemysDetection : MonoBehaviour
                 PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
             }
             Debug.Log("Entered Enemy Death code");
+            PlayerParent.currentEnemyIsDead = false;
             enemyTransform.gameObject.SetActive(false);
         }
     }
