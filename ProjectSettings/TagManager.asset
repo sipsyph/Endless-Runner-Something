@@ -13,6 +13,8 @@ TagManager:
   - Shield
   - Enemy Weapon
   - Player Hitbox
+  - Obstacle
+  - Node
   layers:
   - Default
   - TransparentFX

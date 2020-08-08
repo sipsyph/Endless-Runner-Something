@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GeneratedArea : MonoBehaviour
 {
+    
     private int counter;
     private bool thisAreaIsHit, finishedCounting, shouldStartCounting;
+    
     void Start()
     {
         counter = 0;
@@ -13,28 +15,17 @@ public class GeneratedArea : MonoBehaviour
         shouldStartCounting = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(shouldStartCounting)
-        {
-            counter++; 
-            if (counter > 480) //After 480 frames, remove this area and everything on it
-            {
-                this.transform.parent.transform.parent = GeneratedAreaController.staticGarbageControllerObj.transform;
-                this.transform.parent.gameObject.SetActive(false);
-                counter = 0;
 
-                shouldStartCounting = false;
-            }
-        }
     }
+
+
 
     private void OnTriggerExit(Collider other)
     {
         if(other.tag == "Player")
         {
-            shouldStartCounting = true; //Start counting
             //PlayerParent.isJumping = true;
             Debug.Log("Player has exited");
         }
@@ -44,10 +35,7 @@ public class GeneratedArea : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            counter=0;
-            shouldStartCounting = false;
             //PlayerParent.isJumping = false;
-            //PlayerAnimation.PlayWalkAnimation();
             Debug.Log("Staying with Player");
         }
     }

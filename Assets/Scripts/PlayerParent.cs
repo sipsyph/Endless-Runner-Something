@@ -13,7 +13,7 @@ public class PlayerParent : MonoBehaviour
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
     public static bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
-    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, speed;
+    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, strafingSpeed,speed;
     private int slideCtr, jumpCtr;
     private float actualSpeed;
     void Start()
@@ -53,7 +53,6 @@ public class PlayerParent : MonoBehaviour
                 isAttacking = false;
             }
         }
-        //Debug.Log("Player is attacking "+isAttacking+" ctr: "+attackingModeDurationCtr+"im a fking genius");
     }
     void HandleLookingToAndLookingAwayFromEnemy()
     {
@@ -78,9 +77,7 @@ public class PlayerParent : MonoBehaviour
         }
         else
         {
-            
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*10);
-
             ConstantForwardMovement();
         }
     }
@@ -97,8 +94,7 @@ public class PlayerParent : MonoBehaviour
             if (Input.GetButton (""+KeyCode.A))
             {
                 PlayerAnimation.PlayLeftMoveAnimation();
-                transform.Translate(Vector3.left * Time.deltaTime);
-                actualSpeed = baseMovementSpeed;
+                transform.Translate((Vector3.left  * strafingSpeed) * Time.deltaTime);
             }
         }
 
@@ -108,15 +104,13 @@ public class PlayerParent : MonoBehaviour
             if (Input.GetButton (""+KeyCode.D))
             {
                 PlayerAnimation.PlayRightMoveAnimation();
-                transform.Translate(Vector3.right * Time.deltaTime);
-                actualSpeed = baseMovementSpeed;
+                transform.Translate((Vector3.right * strafingSpeed) * Time.deltaTime);
             }
         }
 
         if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D))
         {
             PlayerAnimation.PlayIdleAnimation();
-            
         }
 
         //Jumping

@@ -47,7 +47,7 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
     public static void PlayJumpAnimation()
     {
         ResetTriggerForParentExcept("JumpTrigger");
-        playerParentAnimator.ResetTrigger("JumpTrigger");
+        //playerParentAnimator.ResetTrigger("JumpTrigger");
         playerParentAnimator.SetTrigger("JumpTrigger");
     }
 
