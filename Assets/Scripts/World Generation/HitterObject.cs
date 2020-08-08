@@ -5,6 +5,7 @@ using UnityEngine;
 public class HitterObject : MonoBehaviour
 {
     public GameObject areaInstancePrefab;
+    public float distanceOfNewAreaInstance;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class HitterObject : MonoBehaviour
             Debug.Log("To Hit B4 Generate is HIT! A new area will now be generated in front of player");
             
             //Instantiate(areaInstancePrefab, new Vector3(collision.transform.parent.position.x, 0, collision.transform.parent.position.z +105f), collision.transform.parent.rotation);
-            areaInstancePrefab.transform.position = new Vector3(collision.transform.parent.position.x, 0, collision.transform.parent.position.z +105f);
+            areaInstancePrefab.transform.position = new Vector3(collision.transform.parent.position.x, 0, collision.transform.parent.position.z + distanceOfNewAreaInstance);
 
         }
     }
