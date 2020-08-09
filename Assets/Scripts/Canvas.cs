@@ -8,7 +8,9 @@ public class Canvas : MonoBehaviour
 {
 
     public TextMeshProUGUI healthText, enemyHealthText, enemyNameText;
-    public Button upperLeftWeaponBtn, upperRightWeaponBtn, bottomLeftWeaponBtn, bottomRightWeaponBtn;
+
+    public Button upperLeftWeaponBtn, upperRightWeaponBtn, bottomLeftWeaponBtn, bottomRightWeaponBtn, inventoryButton;
+    public GameObject inventoryPanel, weaponBtnGroup, shieldJoystick;
     void Start()
     {
         healthText.text = UIResources.health + Player.playerHealth.ToString();
@@ -64,6 +66,25 @@ public class Canvas : MonoBehaviour
         {
             ResetPlayerAttackingMode();
             SwordAnimation.PlayUpwardSlashRightToLeft();
+        });
+
+        inventoryButton.onClick.AddListener(() =>
+        {
+            if(inventoryPanel.activeSelf)
+            {
+                PlayerParent.playerLookingInBag = false;
+                PlayerAnimation.PlayIdleAnimation();
+                weaponBtnGroup.SetActive(true);
+                shieldJoystick.SetActive(true);
+                inventoryPanel.SetActive(false);
+            }else{
+                PlayerParent.playerLookingInBag = true;
+                //PlayerAnimation.PlayLookingInBagAnimation();
+                weaponBtnGroup.SetActive(false);
+                shieldJoystick.SetActive(false);
+                inventoryPanel.SetActive(true);
+            }
+            
         });
     }
 

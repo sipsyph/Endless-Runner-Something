@@ -8,7 +8,7 @@ public class PlayerParent : MonoBehaviour
     public GameObject projectileIncomingIndicator;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
-    public static bool enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, currentEnemyIsDead;
+    public static bool playerLookingInBag, enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, currentEnemyIsDead;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
@@ -18,6 +18,7 @@ public class PlayerParent : MonoBehaviour
     private float actualSpeed;
     void Start()
     {
+        playerLookingInBag = false;
         slideCtr = 0;
         projectileIncomingIndicatorStatic = projectileIncomingIndicator;
         playerBodyStatic = playerBody;
@@ -108,7 +109,7 @@ public class PlayerParent : MonoBehaviour
             }
         }
 
-        if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D))
+        if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D) && !playerLookingInBag)
         {
             PlayerAnimation.PlayIdleAnimation();
         }

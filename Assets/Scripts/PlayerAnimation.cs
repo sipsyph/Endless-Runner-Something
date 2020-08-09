@@ -13,7 +13,7 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
     {
         playerAnimator = pubPlayerAnimator;
         playerParentAnimator = pubPlayerParentAnimator;
-        triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger"};
+        triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger","LookingInBagTrigger"};
         triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger",
         "HitSlideWallTrigger","HitJumpWallTrigger"};
     }
@@ -28,6 +28,13 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
     {
         ResetTriggerExcept("RightMoveTrigger");
         playerAnimator.SetTrigger("RightMoveTrigger");
+    }
+
+    public static void PlayLookingInBagAnimation()
+    {
+        Debug.Log("BAG ANIM");
+        ResetTriggerExcept("LookingInBagTrigger");
+        playerAnimator.SetTrigger("LookingInBagTrigger");
     }
 
 
