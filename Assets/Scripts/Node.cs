@@ -9,12 +9,12 @@ public class Node : MonoBehaviour
 
     Transform[] allChildren;
     List<Transform> allObstacles, allEnemies;
-    private int randNum;
+    private int randNum, ctr;
 
-    private bool isEnemyNode;
+    private bool isEnemyNode, canReset;
     void Start()
     {
-
+        canReset = false;
         thisNode = transform.parent.transform;
         if(thisNode.name.Contains("Enemy"))
         {
@@ -30,7 +30,29 @@ public class Node : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(canReset)
+        {
+            if(isEnemyNode)
+            {
+                if(PlayerParent.currentEnemyIsDead == false)
+                {
+                    PlayerParent.currentEnemyIsDead = true;
+                }
+            }
+            
+            WaitBeforeReset();
+        }
+    }
+
+    void WaitBeforeReset()
+    {
+        ctr++;
+        if(ctr>=60)
+        {
+            ctr = 0;
+            canReset = false;
+            ResetNode();
+        }
     }
 
     void RandomizeObstacleObjectsInThisNode()
@@ -51,6 +73,7 @@ public class Node : MonoBehaviour
         allObstacles[randNum].gameObject.SetActive(true);
         Debug.Log("Chosen OBSTACLE: "+allObstacles[randNum].name);
     }
+
 
     void RandomizeEnemySpawnInThisNode()
     {
@@ -80,6 +103,7 @@ public class Node : MonoBehaviour
     {
         if(isEnemyNode)
         {
+            PlayerParent.currentEnemyIsDead = false;
             RandomizeEnemySpawnInThisNode();
         }else{
             RandomizeObstacleObjectsInThisNode();
@@ -92,7 +116,7 @@ public class Node : MonoBehaviour
     {
         if(col.tag=="Player")
         {
-            ResetNode();
+            canReset = true;
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Adversary : MonoBehaviour
 {
     public int health;
+    private int maxHealth;
     int ctr;
     bool hit;
     // Start is called before the first frame update
@@ -12,6 +13,7 @@ public class Adversary : MonoBehaviour
     {
         ctr = 0;
         hit = false;
+        maxHealth = health;
     }
 
     // Update is called once per frame
@@ -23,13 +25,13 @@ public class Adversary : MonoBehaviour
 
     void HandleHealthPoints()
     {
-        if(health<=0)
+        if(!PlayerParent.currentEnemyIsDead && health<=0)
         {
             if(PlayerParent.currentEnemy == this.transform)
             {
                 PlayerParent.currentEnemyIsDead = true;
+                health = maxHealth;
             }
-            //transform.gameObject.SetActive(false);
         }
     }
     void ResetColorAfterHit()

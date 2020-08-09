@@ -5,16 +5,23 @@ using UnityEngine;
 public class EnemysDetection : MonoBehaviour
 {
     public GameObject bow, meleeRangeDetector;
-    private bool playerDetected, enemyIsMelee;
+    private bool playerDetected, enemyIsMelee, playerExited;
 
     public float movementSpeed, rotationSpeed;
 
+    private int ctrBeforeDeath;
+
     private Transform enemyTransform;
     private string enemyName;
+
+    private Vector3 startingPosition;
+
+    private Quaternion startingRotation;
     
     // Start is called before the first frame update
     void Start()
     {
+        playerExited = false;
         enemyTransform = transform.parent.transform;
         enemyName = enemyTransform.name;
         if(enemyName.Contains("Melee"))
@@ -23,19 +30,21 @@ public class EnemysDetection : MonoBehaviour
         }
         movementSpeed = 1f;
         rotationSpeed = 1f;
+        startingPosition = enemyTransform.localPosition;
+        startingRotation = enemyTransform.localRotation;
+        Debug.Log("Starting Position of "+enemyName+": "+startingPosition);
     }
 
     void Update()
     {  
-        HandleEnemyDeath(); 
+        HandleEnemyDeath(); //Actively observe if Enemy has died to player
         if(playerDetected && (!isEnemyDead()))
         {
             RotateTowardsPlayer();
             if(enemyIsMelee)
             {
                 meleeRangeDetector.SetActive(true);
-            }       
-            
+            }
         }
        
     }
@@ -64,19 +73,31 @@ public class EnemysDetection : MonoBehaviour
 
     void HandleEnemyDeath()
     {
+        
         if(isEnemyDead())
         {
-            if(enemyIsMelee)
+            ctrBeforeDeath++;
+            if(ctrBeforeDeath>=20)
             {
-                Debug.Log("Entered Enemy isMelee code DEAATH");
-                meleeRangeDetector.SetActive(false);
-            }else{
-                bow.SetActive(false);
-                PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
+                ctrBeforeDeath = 0;
+                if(enemyIsMelee)
+                {
+                    Debug.Log("Entered Enemy isMelee code DEAATH");
+                    meleeRangeDetector.SetActive(false);
+                }else{
+                    bow.SetActive(false);
+                    PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
+                }
+                Debug.Log("Entered Enemy Death code");
+
+                enemyTransform.localRotation = startingRotation;
+                enemyTransform.localPosition = startingPosition;
+                playerDetected = false;
+                PlayerParent.currentEnemyIsDead = false;
+                playerExited = false;
+                EnemyAnimation.PlayIdleAnimation();
+                enemyTransform.gameObject.SetActive(false);
             }
-            Debug.Log("Entered Enemy Death code");
-            PlayerParent.currentEnemyIsDead = false;
-            enemyTransform.gameObject.SetActive(false);
         }
     }
 
@@ -107,17 +128,8 @@ public class EnemysDetection : MonoBehaviour
         {
             //When this occurs, it should mean that the player ran away from the enemy
             //without getting locked on to it
-            Debug.Log("Player has left enemy detection");
-            if(enemyIsMelee)
-            {
-                meleeRangeDetector.SetActive(false);
-            }else{
-                bow.SetActive(false);
-                PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
-
-            }
-            playerDetected = false;
-            enemyTransform.gameObject.SetActive(false);
+            playerExited = true;
+            HandleEnemyDeath();
         }
     }
     

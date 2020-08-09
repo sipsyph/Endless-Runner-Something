@@ -7,8 +7,13 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
     private bool playerInAttackRange, readyToAttack;
     public int baseFrameIntervalBetweenAttacks;
     private int ctr;
+
+    private Transform enemyTransform;
+    private string enemyTransformName;
     void Start()
     {
+        enemyTransform = transform.parent.transform;
+        enemyTransformName = enemyTransform.name;
         playerInAttackRange = false;
         readyToAttack = false;
     }
@@ -16,8 +21,14 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.parent.transform.name.Contains("Melee"))
+        if(isEnemyDead())
         {
+            playerInAttackRange = false;
+        }
+
+        if(enemyTransformName.Contains("Melee") && !isEnemyDead())
+        {
+            Debug.Log("ENTERING PLAYER IN ATTACK RANGE CODE");
             if(!playerInAttackRange)
             {
                 ConstantForwardMovement();
@@ -69,7 +80,13 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
 
     void ConstantForwardMovement()
     {
-        transform.parent.transform.Translate(Vector3.forward * Time.deltaTime * 1);
+        enemyTransform.Translate(Vector3.forward * Time.deltaTime * 1);
+    }
+
+
+    bool isEnemyDead()
+    {
+        return (PlayerParent.currentEnemy == enemyTransform && PlayerParent.currentEnemyIsDead);
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -89,7 +106,7 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
         if(collision.tag == "Player")
         {
             Debug.Log("Player is NOT in attack range");
-            if(transform.parent.transform.name.Contains("Melee"))
+            if(enemyTransformName.Contains("Melee"))
             {
                 playerInAttackRange = false;
             }else{
