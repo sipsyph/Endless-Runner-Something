@@ -6,7 +6,6 @@ public class EnemysDetection : MonoBehaviour
 {
     public GameObject bow, meleeRangeDetector;
     private bool playerDetected, enemyIsMelee, playerExited;
-
     public float movementSpeed, rotationSpeed;
 
     private int ctrBeforeDeath;
@@ -27,6 +26,8 @@ public class EnemysDetection : MonoBehaviour
         if(enemyName.Contains("Melee"))
         {
             enemyIsMelee = true;
+        }else{
+            enemyIsMelee = false;
         }
         movementSpeed = 1f;
         rotationSpeed = 1f;
