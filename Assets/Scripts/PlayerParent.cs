@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerParent : MonoBehaviour
 {
-    public Transform mainCamera, playerBody, playerHead;
+    public Transform mainCamera, secondCamera, playerBody, playerHead, playerInteractableWeapons, playerModel;
     public GameObject projectileIncomingIndicator;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
@@ -38,9 +38,22 @@ public class PlayerParent : MonoBehaviour
         
     }
 
-    void PlayerReaction()
+    void CameraFightingMode()
     {
+        //TODO: smooth transition from this mode to the other
+        playerModel.gameObject.SetActive(false);
+        mainCamera.GetComponent<Camera>().enabled = true;
+        secondCamera.GetComponent<Camera>().enabled = false;
+        playerInteractableWeapons.gameObject.SetActive(true);
+    }
 
+    void CameraNotFightingMode()
+    {
+        //TODO: smooth transition from this mode to the other
+        playerModel.gameObject.SetActive(true);
+        mainCamera.GetComponent<Camera>().enabled = false;
+        secondCamera.GetComponent<Camera>().enabled = true;
+        playerInteractableWeapons.gameObject.SetActive(false);
     }
 
     void HandleAttackModeStates()
@@ -59,8 +72,17 @@ public class PlayerParent : MonoBehaviour
     {
         if(enemyDetected)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(currentEnemy.transform.position - transform.position), 5 * Time.deltaTime);
-            mainCamera.localPosition = new Vector3(0, mainCamera.localPosition.y, mainCamera.localPosition.z);
+            CameraFightingMode();
+            // transform.rotation = Quaternion.Slerp(transform.rotation, 
+            // Quaternion.LookRotation(currentEnemy.transform.position - transform.position), 5 * Time.deltaTime);
+
+            var newRotation = Quaternion.LookRotation(currentEnemy.transform.position - transform.position);
+            newRotation.x = 0.0f;
+            newRotation.z = 0.0f;
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 5f * Time.deltaTime);
+
+            //mainCamera.localPosition = new Vector3(0, mainCamera.localPosition.y, mainCamera.localPosition.z);
 
             Debug.Log("Player in range "+isInAttackRange);
             if(!isInAttackRange)
@@ -78,6 +100,7 @@ public class PlayerParent : MonoBehaviour
         }
         else
         {
+            CameraNotFightingMode();
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*10);
             ConstantForwardMovement();
         }

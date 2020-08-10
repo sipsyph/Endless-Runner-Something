@@ -53,27 +53,32 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
 
     private void DetermineTargetSlot()
     {
+        //TODO: Handle different enemies' animations here
         int randNum = Random.Range(1,100);
-        if(randNum>=1 && randNum<=25)
+
+        if(enemyTransformName.Contains("Slime"))
         {
-            EnemyAnimation.PlayUpperLeftSwingAnimation();
-            //EnemyAnimation.PlayBottomLeftSwingAnimation();
+            Debug.Log("Enemy is SLIME");
+            EnemyAnimation.PlayLeftAttackAnimation();
+        }else{
+            if(randNum>=1 && randNum<=25)
+            {
+                EnemyAnimation.PlayUpperLeftSwingAnimation();
+            }
+            else if(randNum>25 && randNum<=50)
+            {
+                EnemyAnimation.PlayUpperRightSwingAnimation();
+            }
+            else if(randNum>50 && randNum<=75)
+            {
+                EnemyAnimation.PlayBottomLeftSwingAnimation();
+            }
+            else
+            {
+                EnemyAnimation.PlayBottomRightSwingAnimation();
+            }
         }
-        else if(randNum>25 && randNum<=50)
-        {
-            EnemyAnimation.PlayUpperRightSwingAnimation();
-            //EnemyAnimation.PlayBottomLeftSwingAnimation();
-        }
-        else if(randNum>50 && randNum<=75)
-        {
-            //EnemyAnimation.PlayUpperLeftSwingAnimation();
-            EnemyAnimation.PlayBottomLeftSwingAnimation();
-        }
-        else
-        {
-            //EnemyAnimation.PlayUpperRightSwingAnimation();
-            EnemyAnimation.PlayBottomRightSwingAnimation();
-        }
+        
 
         
     }

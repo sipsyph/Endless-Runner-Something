@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
         HandleAnimationWhenGettingHitByObstacle();
     }
 
+     
+
     void HandleAnimationWhenGettingHitByObstacle()
     {
         if(playerGotHitBySlideWall)

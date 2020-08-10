@@ -5,55 +5,79 @@ using UnityEngine;
 public class EnemyAnimation : MonoBehaviour
 {
 public static Animator enemyAnimator;
-public static string[] triggerNames;
+public static string[] swordTriggerNames, slimeTriggerNames;
 
 public Animator pubEnemyAnimator;
 
     void Start()
     {
         //enemyAnimator = pubEnemyAnimator;
-        triggerNames = new string[]{"GettingHitTrigger","IdleTrigger","UpperLeftSwingTrigger",
+        swordTriggerNames = new string[]{"GettingHitTrigger","IdleTrigger","UpperLeftSwingTrigger",
         "BottomLeftSwingTrigger","UpperRightSwingTrigger","BottomRightSwingTrigger"};
+
+        slimeTriggerNames = new string[]{"IdleTrigger","LeftHitTrigger","RightHitTrigger"};
+
     }
 
-
-    public static void PlayUpperLeftSwingAnimation()
+    #region Enemy with Sword
+        public static void PlayUpperLeftSwingAnimation()
     {
-        ResetTriggerExcept("UpperLeftSwingTrigger");
+        ResetTriggerExcept("UpperLeftSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("UpperLeftSwingTrigger");
     }
 
         public static void PlayUpperRightSwingAnimation()
     {
-        ResetTriggerExcept("UpperRightSwingTrigger");
+        ResetTriggerExcept("UpperRightSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("UpperRightSwingTrigger");
     }
 
         public static void PlayBottomLeftSwingAnimation()
     {
-        ResetTriggerExcept("BottomLeftSwingTrigger");
+        ResetTriggerExcept("BottomLeftSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("BottomLeftSwingTrigger");
     }
 
         public static void PlayBottomRightSwingAnimation()
     {
-        ResetTriggerExcept("BottomRightSwingTrigger");
+        ResetTriggerExcept("BottomRightSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("BottomRightSwingTrigger");
     }
 
     public static void PlayGettingHitAnimation()
     {
-        ResetTriggerExcept("GettingHitTrigger");
+        ResetTriggerExcept("GettingHitTrigger",swordTriggerNames);
         enemyAnimator.SetTrigger("GettingHitTrigger");
     }
 
     public static void PlayIdleAnimation()
     {
-        ResetTriggerExcept("IdleTrigger");
+        ResetTriggerExcept("IdleTrigger",swordTriggerNames);
         enemyAnimator.SetTrigger("IdleTrigger");
     }
+    #endregion
+    
+    #region Slime
+    public static void PlayLeftAttackAnimation()
+    {
+        ResetTriggerExcept("LeftHitTrigger",slimeTriggerNames);
+        enemyAnimator.SetTrigger("LeftHitTrigger");
+    }
 
-    public static void ResetTriggerExcept(string triggerName)
+        public static void PlayRightAttackAnimation()
+    {
+        ResetTriggerExcept("RightHitTrigger",slimeTriggerNames);
+        enemyAnimator.SetTrigger("RightHitTrigger");
+    }
+
+        public static void PlaySlimeIdleAnimation()
+    {
+        ResetTriggerExcept("IdleTrigger",slimeTriggerNames);
+        enemyAnimator.SetTrigger("IdleTrigger");
+    }
+    #endregion
+
+    public static void ResetTriggerExcept(string triggerName, string[] triggerNames)
     {
         //Debug.Log("ERROR => "+triggerName+" Animator: "+enemyAnimator.name);
         for(int i=0; i<triggerNames.Length;i++)
@@ -65,6 +89,6 @@ public Animator pubEnemyAnimator;
                 //Debug.Log("Resetting Trigger: "+triggerNames[i]);
             }
         }
-        enemyAnimator.SetTrigger("IdleTrigger");
+        //enemyAnimator.SetTrigger("IdleTrigger");
     }
 }
