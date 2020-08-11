@@ -9,6 +9,9 @@ public class HitterObject : MonoBehaviour
     public Transform areaBackgroundOfFirstAreaInst, areaBackgroundOfSecondAreaInst;
     
     public Transform[] firstAreaInstanceNodes, secondAreaInstanceNodes;
+    
+    private string[] genericNodeNames = {"First Node", "Second Node", 
+    "Third Node", "Fourth Node", "Fifth Node", "Melee Enemy Node", "Generic Enemy Node", "Boss Enemy Node"};
     public float distanceOfNewAreaInstance;
 
     private bool switchInstance;
@@ -17,9 +20,29 @@ public class HitterObject : MonoBehaviour
 
     void Start()
     {
+        InitializeAreaInstances();
         switchInstance = true;
         RandomizeBackgroundObjectsOfThisAreaInst(areaBackgroundOfFirstAreaInst);
         RandomizeBackgroundObjectsOfThisAreaInst(areaBackgroundOfSecondAreaInst);
+    }
+
+    void InitializeAreaInstances()
+    {
+        firstAreaInstanceNodes = new Transform[genericNodeNames.Length];
+        secondAreaInstanceNodes = new Transform[genericNodeNames.Length];
+
+        areaBackgroundOfFirstAreaInst = firstAreaInstance.transform.GetChild(0);
+        areaBackgroundOfSecondAreaInst = secondAreaInstance.transform.GetChild(0);
+
+        Transform[] allChildren = firstAreaInstance.GetComponentsInChildren<Transform>(true);
+
+        int i=0;
+        foreach (string nodeName in genericNodeNames)
+        {
+            firstAreaInstanceNodes[i] = firstAreaInstance.transform.Find(nodeName);
+            secondAreaInstanceNodes[i] = secondAreaInstance.transform.Find(nodeName);
+            i++;
+        }
     }
 
     void RandomizeBackgroundObjectsOfThisAreaInst(Transform areaBackground)
@@ -33,7 +56,7 @@ public class HitterObject : MonoBehaviour
             child.gameObject.SetActive(true);
             if(!child.name.Equals("Area Background"))
             {
-                if(randNum>=50)
+                if(randNum>=70)
                 {   
                     child.gameObject.SetActive(false);
                 }else{
