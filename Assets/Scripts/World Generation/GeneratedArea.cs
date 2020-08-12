@@ -39,4 +39,13 @@ public class GeneratedArea : MonoBehaviour
             Debug.Log("Staying with Player");
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player")
+        {
+            PlayerParent.isJumping = false;
+            Debug.Log("Player entered plane");
+        }
+    }
 }

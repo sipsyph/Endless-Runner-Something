@@ -35,7 +35,6 @@ public class PlayerParent : MonoBehaviour
         PlayerControls();
         HandleLookingToAndLookingAwayFromEnemy();
         HandleAttackModeStates();
-        
     }
 
     void CameraFightingMode()
@@ -138,48 +137,48 @@ public class PlayerParent : MonoBehaviour
         }
 
         //Jumping
-        if(Input.GetButton(""+KeyCode.C)){
+        if(Input.GetButtonDown(""+KeyCode.C) && !isJumping){
+            Debug.Log("Jump Button");
+            slideCtr = 0;
+            isSliding = false;
+            PlayerAnimation.PlayWalkAnimation();
             PlayerAnimation.PlayJumpAnimation();
             isJumping = true;
         }
         if(isJumping)
         {
             speed = actualSpeed = baseMovementSpeed * jumpSpeedMultiplier;
-            jumpCtr++;
-            if(jumpCtr>30)
-            {
-                if(jumpCtr>6)
-                {
-                    speed = actualSpeed = baseMovementSpeed;
-                }
-                jumpCtr = 0;
-                isJumping = false;
-                
-                PlayerAnimation.PlayWalkAnimation();
-            }
-        }
-        else
-        {
-            jumpCtr = 0;
         }
 
         //Sliding
-        if(Input.GetButton(""+KeyCode.V) && !isJumping){
+        if(Input.GetButtonDown(""+KeyCode.V) && !isSliding){
+            Debug.Log("Slide Button");
+            isJumping = false;
+            PlayerAnimation.PlayWalkAnimation();
             PlayerAnimation.PlaySlideAnimation();
+            slideCtr = 0;
             isSliding = true;
         }
         if(isSliding)
         {
             speed = actualSpeed = baseMovementSpeed * slideSpeedMultiplier;
             slideCtr++;
-            if(slideCtr>45)
+            if(slideCtr>=45)
             {
-                slideCtr = 0;
                 isSliding = false;
-                speed = actualSpeed = baseMovementSpeed;
-                PlayerAnimation.PlayWalkAnimation();
+                slideCtr = 0;
             }
         }
+
+        if(!isSliding && !isJumping)
+        {
+            PlayerAnimation.PlayWalkAnimation();
+            speed = actualSpeed = baseMovementSpeed;
+        }
+
+        Debug.Log("is jumping: "+isJumping);
+        Debug.Log("is sliding: "+isSliding);
+
     }
     
 

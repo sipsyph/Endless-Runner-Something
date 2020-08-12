@@ -9,13 +9,29 @@ public static string[] triggerNames, triggerNamesForPlayerParent;
 
 public Animator pubPlayerAnimator, pubPlayerParentAnimator;
 
+private Rigidbody rigidbody;
+
     void Start()
     {
+        rigidbody = GetComponent<Rigidbody>();
         playerAnimator = pubPlayerAnimator;
         playerParentAnimator = pubPlayerParentAnimator;
         triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger","LookingInBagTrigger"};
         triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger",
         "HitSlideWallTrigger","HitJumpWallTrigger"};
+    }
+
+    public void AlertObservers(string message)
+    {
+        if(message.Equals("JumpEnded"))
+        {
+            PlayerParent.isJumping = false;
+        }
+
+        if(message.Equals("SlideEnded"))
+        {
+            PlayerParent.isSliding = false;
+        }
     }
 
     public static void PlayLeftMoveAnimation()
@@ -48,13 +64,14 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
     public static void PlaySlideAnimation()
     {
         ResetTriggerForParentExcept("SlideTrigger");
+        playerParentAnimator.ResetTrigger("SlideTrigger");
         playerParentAnimator.SetTrigger("SlideTrigger");
     }
 
     public static void PlayJumpAnimation()
     {
         ResetTriggerForParentExcept("JumpTrigger");
-        //playerParentAnimator.ResetTrigger("JumpTrigger");
+        playerParentAnimator.ResetTrigger("JumpTrigger");
         playerParentAnimator.SetTrigger("JumpTrigger");
     }
 
@@ -89,6 +106,7 @@ public Animator pubPlayerAnimator, pubPlayerParentAnimator;
         }
 
     }
+    
 
     public static void ResetTriggerForParentExcept(string triggerName)
     {
