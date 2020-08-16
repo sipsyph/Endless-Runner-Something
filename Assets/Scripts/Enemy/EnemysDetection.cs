@@ -77,28 +77,26 @@ public class EnemysDetection : MonoBehaviour
         
         if(isEnemyDead())
         {
-            ctrBeforeDeath++;
-            if(ctrBeforeDeath>=20)
+            Debug.Log("Entered Death code for"+enemyName);
+            ctrBeforeDeath = 0;
+            if(enemyIsMelee)
             {
-                ctrBeforeDeath = 0;
-                if(enemyIsMelee)
-                {
-                    Debug.Log("Entered Enemy isMelee code DEAATH");
-                    meleeRangeDetector.SetActive(false);
-                }else{
-                    bow.SetActive(false);
-                    PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
-                }
-                Debug.Log("Entered Enemy Death code");
-
-                enemyTransform.localRotation = startingRotation;
-                enemyTransform.localPosition = startingPosition;
-                playerDetected = false;
-                PlayerParent.currentEnemyIsDead = false;
-                playerExited = false;
-                EnemyAnimation.PlayIdleAnimation();
-                enemyTransform.gameObject.SetActive(false);
+                Debug.Log("Entered Enemy isMelee code DEAATH");
+                meleeRangeDetector.SetActive(false);
+            }else{
+                Debug.Log("Entered Enemy isRanged code DEAATH");
+                bow.SetActive(false);
+                PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
             }
+            Debug.Log("Entered Enemy Death code");
+
+            enemyTransform.localRotation = startingRotation;
+            enemyTransform.localPosition = startingPosition;
+            playerDetected = false;
+            PlayerParent.currentEnemyIsDead = false;
+            playerExited = false;
+            EnemyAnimation.PlayIdleAnimation();
+            enemyTransform.gameObject.SetActive(false);
         }
     }
 
@@ -129,8 +127,8 @@ public class EnemysDetection : MonoBehaviour
         {
             //When this occurs, it should mean that the player ran away from the enemy
             //without getting locked on to it
+            Debug.Log("Player has dodged fight with "+enemyName);
             playerExited = true;
-            HandleEnemyDeath();
         }
     }
     

@@ -17,13 +17,13 @@ public class ObstacleAnimationTrigger : MonoBehaviour
     {
         if(col.tag=="Player")
         {
+            Debug.Log("falling obs hit by player");
             PlayFallingAnimation();
         }
     }
 
     public void PlayFallingAnimation()
     {
-        //ResetTriggerExcept("FallingTrigger");
         animator.SetTrigger("FallingTrigger");
     }
 

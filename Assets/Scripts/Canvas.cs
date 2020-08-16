@@ -20,7 +20,9 @@ public class Canvas : MonoBehaviour
     void Update()
     {
         UpdatePlayerHealthText();
-        UpdateCurrentEnemyUI();
+        //UpdateCurrentEnemyUI();
+        enemyNameText.text = ""+ PlayerParent.currentEnemy.gameObject.name + "Dead: "+PlayerParent.currentEnemyIsDead;
+        enemyHealthText.text = PlayerParent.currentEnemyHealth.ToString();
     }
 
     void UpdatePlayerHealthText()

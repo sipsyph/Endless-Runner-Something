@@ -89,6 +89,6 @@ public Animator pubEnemyAnimator;
                 //Debug.Log("Resetting Trigger: "+triggerNames[i]);
             }
         }
-        //enemyAnimator.SetTrigger("IdleTrigger");
+        enemyAnimator.SetTrigger("IdleTrigger");
     }
 }

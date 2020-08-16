@@ -32,23 +32,25 @@ public class Node : MonoBehaviour
     {
         if(canReset)
         {
-            if(isEnemyNode)
-            {
-                if(PlayerParent.currentEnemyIsDead == false)
-                {
-                    PlayerParent.currentEnemyIsDead = true;
-                }
-            }
-            
             WaitBeforeReset();
+
         }
     }
 
     void WaitBeforeReset()
     {
-        ctr++;
-        if(ctr>=60)
+        if(isEnemyNode)
         {
+            if(PlayerParent.currentEnemyIsDead == false)
+            {
+                Debug.Log("Killing Enemy in this Node: "+thisNode.name);
+                PlayerParent.currentEnemyIsDead = true;
+            }
+        }
+        ctr++;
+        if(ctr>=10)
+        {
+            PlayerParent.currentEnemyIsDead = false;
             ctr = 0;
             canReset = false;
             ResetNode();
@@ -63,15 +65,21 @@ public class Node : MonoBehaviour
         {
             if(child.tag == "Obstacle")
             {
-                Debug.Log("Obstacle of Node "+thisNode.name+":"+child.name);
+                //Debug.Log("Obstacle of Node "+thisNode.name+":"+child.name);
                 child.gameObject.SetActive(false);
                 allObstacles.Add(child);
             }
         }
-        Debug.Log("OBSTACLE COUNT: "+allObstacles.Count);
+        //Debug.Log("OBSTACLE COUNT: "+allObstacles.Count);
         randNum = Random.Range(0,allObstacles.Count);
         allObstacles[randNum].gameObject.SetActive(true);
-        Debug.Log("Chosen OBSTACLE: "+allObstacles[randNum].name);
+        if(allObstacles[randNum].gameObject.GetComponent<Animator>()!=null)
+        {
+            allObstacles[randNum].gameObject.GetComponent<Animator>().ResetTrigger("FallingTrigger");
+            //allObstacles[randNum].gameObject.GetComponent<Animator>().SetTrigger("IdleTrigger");
+            //Debug.Log("Playing Idle anim for this obstacle: "+allObstacles[randNum].name);
+        }
+        //Debug.Log("Chosen OBSTACLE: "+allObstacles[randNum].name);
     }
 
 
@@ -83,12 +91,12 @@ public class Node : MonoBehaviour
         {
             if(child.tag == "Enemy")
             {
-                Debug.Log("Enemy in Node "+thisNode.name+":"+child.name);
+                //Debug.Log("Enemy in Node "+thisNode.name+":"+child.name);
                 child.gameObject.SetActive(false);
                 allEnemies.Add(child);
             }
         }
-        Debug.Log("ENEMY COUNT: "+allEnemies.Count);
+        //Debug.Log("ENEMY COUNT: "+allEnemies.Count);
         if(allEnemies.Count<=1)
         {
             randNum = 0;
@@ -97,13 +105,12 @@ public class Node : MonoBehaviour
         }
         
         allEnemies[randNum].gameObject.SetActive(true);
-        Debug.Log("Chosen ENEMY: "+allEnemies[randNum].name);
+        //Debug.Log("Chosen ENEMY: "+allEnemies[randNum].name);
     }
     void ResetNode()
     {
         if(isEnemyNode)
         {
-            PlayerParent.currentEnemyIsDead = false;
             RandomizeEnemySpawnInThisNode();
         }else{
             RandomizeObstacleObjectsInThisNode();

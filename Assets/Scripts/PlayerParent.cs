@@ -18,6 +18,7 @@ public class PlayerParent : MonoBehaviour
     private float actualSpeed;
     void Start()
     {
+        currentEnemyIsDead = false;
         playerLookingInBag = false;
         slideCtr = 0;
         projectileIncomingIndicatorStatic = projectileIncomingIndicator;
