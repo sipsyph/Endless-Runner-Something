@@ -13,7 +13,7 @@ public class PlayerParent : MonoBehaviour
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
     public static bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
-    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, strafingSpeed,speed;
+    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, strafingSpeed,speed, playerModelSlidingXOffset;
     private int slideCtr, jumpCtr;
     private float actualSpeed;
     void Start()
@@ -73,9 +73,6 @@ public class PlayerParent : MonoBehaviour
         if(enemyDetected)
         {
             CameraFightingMode();
-            // transform.rotation = Quaternion.Slerp(transform.rotation, 
-            // Quaternion.LookRotation(currentEnemy.transform.position - transform.position), 5 * Time.deltaTime);
-
             var newRotation = Quaternion.LookRotation(currentEnemy.transform.position - transform.position);
             newRotation.x = 0.0f;
             newRotation.z = 0.0f;
@@ -119,6 +116,7 @@ public class PlayerParent : MonoBehaviour
             {
                 PlayerAnimation.PlayLeftMoveAnimation();
                 transform.Translate((Vector3.left  * strafingSpeed) * Time.deltaTime);
+                BandageFixToPlayerModelSlidingXOvershoot(-10f);
             }
         }
 
@@ -129,12 +127,15 @@ public class PlayerParent : MonoBehaviour
             {
                 PlayerAnimation.PlayRightMoveAnimation();
                 transform.Translate((Vector3.right * strafingSpeed) * Time.deltaTime);
+                BandageFixToPlayerModelSlidingXOvershoot(10f);
             }
         }
 
         if (!Input.GetButton (""+KeyCode.A) && !Input.GetButton (""+KeyCode.D) && !playerLookingInBag)
         {
             PlayerAnimation.PlayIdleAnimation();
+            BandageFixToPlayerModelSlidingXOvershoot(0);
+
         }
 
         //Jumping
@@ -176,10 +177,17 @@ public class PlayerParent : MonoBehaviour
             PlayerAnimation.PlayWalkAnimation();
             speed = actualSpeed = baseMovementSpeed;
         }
+    }
 
-        Debug.Log("is jumping: "+isJumping);
-        Debug.Log("is sliding: "+isSliding);
+    public void BandageFixToPlayerModelSlidingXOvershoot(float yValue)
+    {
+        if(isSliding)
+        {
+            playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(playerModelSlidingXOffset,0,0), 5f * Time.deltaTime);
 
+        }else{
+            playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.Euler(0f,yValue,0), 5f * Time.deltaTime);
+        }
     }
     
 
