@@ -11,34 +11,32 @@ public Animator pubEnemyAnimator;
 
     void Start()
     {
-        //enemyAnimator = pubEnemyAnimator;
         swordTriggerNames = new string[]{"GettingHitTrigger","IdleTrigger","UpperLeftSwingTrigger",
-        "BottomLeftSwingTrigger","UpperRightSwingTrigger","BottomRightSwingTrigger"};
+        "BottomLeftSwingTrigger","UpperRightSwingTrigger","BottomRightSwingTrigger","BlockedTrigger","WalkingTrigger"};
 
         slimeTriggerNames = new string[]{"IdleTrigger","LeftHitTrigger","RightHitTrigger"};
-
     }
 
-    #region Enemy with Sword
-        public static void PlayUpperLeftSwingAnimation()
+    #region Kobold with Sword
+    public static void PlayUpperLeftSwingAnimation()
     {
         ResetTriggerExcept("UpperLeftSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("UpperLeftSwingTrigger");
     }
 
-        public static void PlayUpperRightSwingAnimation()
+    public static void PlayUpperRightSwingAnimation()
     {
         ResetTriggerExcept("UpperRightSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("UpperRightSwingTrigger");
     }
 
-        public static void PlayBottomLeftSwingAnimation()
+    public static void PlayBottomLeftSwingAnimation()
     {
         ResetTriggerExcept("BottomLeftSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("BottomLeftSwingTrigger");
     }
 
-        public static void PlayBottomRightSwingAnimation()
+    public static void PlayBottomRightSwingAnimation()
     {
         ResetTriggerExcept("BottomRightSwingTrigger", swordTriggerNames);
         enemyAnimator.SetTrigger("BottomRightSwingTrigger");
@@ -48,6 +46,18 @@ public Animator pubEnemyAnimator;
     {
         ResetTriggerExcept("GettingHitTrigger",swordTriggerNames);
         enemyAnimator.SetTrigger("GettingHitTrigger");
+    }
+
+    public static void PlayBlockedAnimation()
+    {
+        ResetTriggerExcept("BlockedTrigger",swordTriggerNames);
+        enemyAnimator.SetTrigger("BlockedTrigger");
+    }
+
+    public static void PlayWalkingAnimation()
+    {
+        ResetTriggerExcept("WalkingTrigger",swordTriggerNames);
+        enemyAnimator.SetTrigger("WalkingTrigger");
     }
 
     public static void PlayIdleAnimation()

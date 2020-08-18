@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerParent : MonoBehaviour
 {
+    public Button leftBtn, rightBtn; //Temporary buttons for debugging
+    
     public Transform mainCamera, secondCamera, playerBody, playerHead, playerInteractableWeapons, playerModel;
     public GameObject projectileIncomingIndicator;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
@@ -16,6 +20,8 @@ public class PlayerParent : MonoBehaviour
     public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, strafingSpeed,speed, playerModelSlidingXOffset;
     private int slideCtr, jumpCtr;
     private float actualSpeed;
+
+    private bool leftBtnPressing, rightBtnPressing;
     void Start()
     {
         currentEnemyIsDead = false;
@@ -29,6 +35,29 @@ public class PlayerParent : MonoBehaviour
         hittingRightAreaBlocker = false;
         actualSpeed = baseMovementSpeed;
         speed = actualSpeed;
+
+        leftBtn.onClick.AddListener(() =>
+        {
+            if(leftBtnPressing)
+            {
+                leftBtnPressing = false;
+            }else{
+                leftBtnPressing = true;
+            }
+            rightBtnPressing = false;
+        });
+
+        rightBtn.onClick.AddListener(() =>
+        {
+            if(rightBtnPressing)
+            {
+                rightBtnPressing = false;
+            }else{
+                rightBtnPressing = true;
+            }
+            leftBtnPressing = false;
+        });
+
     }
 
     void Update()
@@ -112,7 +141,7 @@ public class PlayerParent : MonoBehaviour
         //Moving Left
         if(!hittingLeftAreaBlocker)
         {
-            if (Input.GetButton (""+KeyCode.A))
+            if (Input.GetButton (""+KeyCode.A) || leftBtnPressing)
             {
                 PlayerAnimation.PlayLeftMoveAnimation();
                 transform.Translate((Vector3.left  * strafingSpeed) * Time.deltaTime);
@@ -123,7 +152,7 @@ public class PlayerParent : MonoBehaviour
         //Moving Right
         if(!hittingRightAreaBlocker)
         {
-            if (Input.GetButton (""+KeyCode.D))
+            if (Input.GetButton (""+KeyCode.D) || rightBtnPressing)
             {
                 PlayerAnimation.PlayRightMoveAnimation();
                 transform.Translate((Vector3.right * strafingSpeed) * Time.deltaTime);
@@ -139,13 +168,15 @@ public class PlayerParent : MonoBehaviour
         }
 
         //Jumping
-        if(Input.GetButtonDown(""+KeyCode.C) && !isJumping){
+        if( (Input.GetButtonDown(""+KeyCode.C) || DraggingOnCanvas.draggedUp) && !isJumping )
+        {
             Debug.Log("Jump Button");
             slideCtr = 0;
             isSliding = false;
             PlayerAnimation.PlayWalkAnimation();
             PlayerAnimation.PlayJumpAnimation();
             isJumping = true;
+            DraggingOnCanvas.draggedUp = false;
         }
         if(isJumping)
         {
@@ -153,13 +184,14 @@ public class PlayerParent : MonoBehaviour
         }
 
         //Sliding
-        if(Input.GetButtonDown(""+KeyCode.V) && !isSliding){
+        if( (Input.GetButtonDown(""+KeyCode.V) || DraggingOnCanvas.draggedDown) && !isSliding ){
             Debug.Log("Slide Button");
             isJumping = false;
             PlayerAnimation.PlayWalkAnimation();
             PlayerAnimation.PlaySlideAnimation();
             slideCtr = 0;
             isSliding = true;
+            DraggingOnCanvas.draggedDown = false;
         }
         if(isSliding)
         {

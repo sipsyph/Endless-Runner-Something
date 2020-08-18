@@ -9,7 +9,8 @@ public class Canvas : MonoBehaviour
 
     public TextMeshProUGUI healthText, enemyHealthText, enemyNameText;
 
-    public Button upperLeftWeaponBtn, upperRightWeaponBtn, bottomLeftWeaponBtn, bottomRightWeaponBtn, inventoryButton;
+    public Button upperLeftWeaponBtn, upperRightWeaponBtn, bottomLeftWeaponBtn, bottomRightWeaponBtn, 
+    inventoryBtn, leftBtn, rightBtn;
     public GameObject inventoryPanel, weaponBtnGroup, shieldJoystick;
     void Start()
     {
@@ -21,7 +22,10 @@ public class Canvas : MonoBehaviour
     {
         UpdatePlayerHealthText();
         //UpdateCurrentEnemyUI();
-        enemyNameText.text = ""+ PlayerParent.currentEnemy.gameObject.name + "Dead: "+PlayerParent.currentEnemyIsDead;
+        //Debugging text
+        //enemyNameText.text = ""+ PlayerParent.currentEnemy.gameObject.name + "Dead: "+PlayerParent.currentEnemyIsDead;
+        enemyNameText.text = ""+ PlayerParent.currentEnemy.gameObject.name;
+
         enemyHealthText.text = PlayerParent.currentEnemyHealth.ToString();
     }
 
@@ -70,7 +74,7 @@ public class Canvas : MonoBehaviour
             SwordAnimation.PlayUpwardSlashRightToLeft();
         });
 
-        inventoryButton.onClick.AddListener(() =>
+        inventoryBtn.onClick.AddListener(() =>
         {
             if(inventoryPanel.activeSelf)
             {

@@ -67,7 +67,7 @@ public class EnemysDetection : MonoBehaviour
     void ConstantForwardMovement()
     {
         if(!PlayerParent.enemyDetected)
-        {   
+        {
             enemyTransform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
         }
     }

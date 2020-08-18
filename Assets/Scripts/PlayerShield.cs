@@ -37,12 +37,12 @@ public class PlayerShield : MonoBehaviour
 
     void BandAidFixToReversedShieldMovementWhenRotating()
     {
-        if(Mathf.Abs(TransformUtils.GetInspectorRotation(playerParent.transform).y)>=90f)
-        {
-            ReversedTouchJoystickControl();
-        }else{
+        // if(Mathf.Abs(TransformUtils.GetInspectorRotation(playerParent.transform).y)>=90f)
+        // {
+        //     ReversedTouchJoystickControl();
+        // }else{
             TouchJoystickControl();
-        }
+        //}
 
     }
 

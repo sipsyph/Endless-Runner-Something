@@ -36,6 +36,7 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
             }
             else{
                 RandomAttackEveryInterval(baseFrameIntervalBetweenAttacks);
+                //HandleWhenPlayerBlocksAttack();
             }
         }
 
@@ -51,8 +52,18 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
         }
     }
 
+    void HandleWhenPlayerBlocksAttack()
+    {
+        if(PlayerShield.shieldBlocked)
+        {
+            Debug.Log("Playing enemy got blocked animation");
+            EnemyAnimation.PlayBlockedAnimation();
+        }
+    }
+
     private void DetermineTargetSlot()
     {
+        Debug.Log("Enemy is Attacking");
         //TODO: Handle different enemies' animations here
         int randNum = Random.Range(1,100);
 
@@ -60,7 +71,10 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
         {
             Debug.Log("Enemy is SLIME");
             EnemyAnimation.PlayLeftAttackAnimation();
-        }else{
+            return;
+        }
+        if(enemyTransformName.Contains("Kobold Sword"))
+        {
             if(randNum>=1 && randNum<=25)
             {
                 EnemyAnimation.PlayUpperLeftSwingAnimation();
@@ -79,13 +93,12 @@ public class EnemysMeleeRangeDetection : MonoBehaviour
             }
         }
         
-
-        
     }
 
     void ConstantForwardMovement()
     {
         enemyTransform.Translate(Vector3.forward * Time.deltaTime * 1);
+        EnemyAnimation.PlayWalkingAnimation();
     }
 
 
