@@ -8,12 +8,18 @@ public class Node : MonoBehaviour
     Transform thisNode;
 
     Transform[] allChildren;
-    List<Transform> allObstacles, allEnemies;
+    List<Transform> allObstacles, allEnemies, allItemPositions, allItems;
     private int randNum, ctr;
 
     private bool isEnemyNode, canReset;
+
+    public bool thisNodeHasItemSpawns;
     void Start()
     {
+        allObstacles = new List<Transform>();
+        allEnemies = new List<Transform>();
+        allItemPositions = new List<Transform>();
+        allItems = new List<Transform>();
         canReset = false;
         thisNode = transform.parent.transform;
         if(thisNode.name.Contains("Enemy"))
@@ -21,10 +27,12 @@ public class Node : MonoBehaviour
             isEnemyNode = true;
         }else{
             isEnemyNode = false;
+            RandomizeObstacleObjectsInThisNode();
         }
-        allObstacles = new List<Transform>();
-        allEnemies = new List<Transform>();
-        RandomizeObstacleObjectsInThisNode();
+        if(thisNodeHasItemSpawns)
+        {
+            RandomizeItemObjectsInThisNode();
+        }
     }
 
     // Update is called once per frame
@@ -82,6 +90,37 @@ public class Node : MonoBehaviour
         //Debug.Log("Chosen OBSTACLE: "+allObstacles[randNum].name);
     }
 
+    void RandomizeItemObjectsInThisNode()
+    {
+        allChildren = thisNode.GetComponentsInChildren<Transform>(true);
+        Debug.Log("Randomized items in "+thisNode.name);
+
+        foreach(Transform child in allChildren)
+        {
+            if(child.tag == "Item Position")
+            {
+                Debug.Log("Item of Node "+thisNode.name+":"+child.name);
+                child.gameObject.SetActive(false);
+                allItemPositions.Add(child);
+            }
+        }
+        Debug.Log("ITEM COUNT: "+allItemPositions.Count);
+        randNum = Random.Range(0,allItemPositions.Count-1);
+        Transform chosenItemPos = allItemPositions[randNum];
+        chosenItemPos.gameObject.SetActive(true);
+        Debug.Log("Chosen ITEM: "+allItemPositions[randNum].name);
+
+        randNum = Random.Range(0,ItemManager.itemPool.Count);
+        //ItemManager.itemPool[randNum].gameObject.SetActive(true);
+        //ItemManager.itemPool[randNum].position = new Vector3(chosenItemPos.position.x,ItemManager.itemPool[randNum].position.y,chosenItemPos.position.z);
+        GameObject item = Instantiate( ItemManager.itemPool[randNum]
+        , new Vector3(chosenItemPos.position.x,ItemManager.itemPool[randNum].transform.position.y,chosenItemPos.position.z)
+        , Quaternion.identity);
+
+        item.transform.parent = chosenItemPos;
+        return;
+    }
+
 
     void RandomizeEnemySpawnInThisNode()
     {
@@ -115,8 +154,14 @@ public class Node : MonoBehaviour
         }else{
             RandomizeObstacleObjectsInThisNode();
         }
+
+        if(thisNodeHasItemSpawns)
+        {
+            RandomizeItemObjectsInThisNode();
+        }
         
         this.transform.parent.gameObject.SetActive(false);
+        return;
     }
 
     private void OnTriggerExit(Collider col)

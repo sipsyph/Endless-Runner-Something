@@ -33,7 +33,7 @@ public class EnemysDetection : MonoBehaviour
         rotationSpeed = 1f;
         startingPosition = enemyTransform.localPosition;
         startingRotation = enemyTransform.localRotation;
-        Debug.Log("Starting Position of "+enemyName+": "+startingPosition);
+        //Debug.Log("Starting Position of "+enemyName+": "+startingPosition);
     }
 
     void Update()
@@ -88,7 +88,6 @@ public class EnemysDetection : MonoBehaviour
                 bow.SetActive(false);
                 PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
             }
-            Debug.Log("Entered Enemy Death code");
 
             enemyTransform.localRotation = startingRotation;
             enemyTransform.localPosition = startingPosition;
@@ -113,7 +112,7 @@ public class EnemysDetection : MonoBehaviour
                 bow.SetActive(true);
             }
             PlayerParent.currentEnemy = enemyTransform;
-            
+            PlayerParent.currentEnemyHealth = enemyTransform.gameObject.GetComponent<Adversary>().health;
             EnemyAnimation.enemyAnimator = enemyTransform.gameObject.GetComponent<Animator>();
             //Debug.Log("Current Enemy animator: "+EnemyAnimation.enemyAnimator.name);
             playerDetected = true;

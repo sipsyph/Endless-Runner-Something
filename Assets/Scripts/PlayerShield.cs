@@ -12,6 +12,7 @@ public class PlayerShield : MonoBehaviour
     private bool isHittingBorder, hit;
 
     public static bool shieldBlocked;
+    public float shieldMovementSpeed;
     private int ctr, changeColorCtr, slideCtr;
     private float playerParentYAxis;
 
@@ -22,7 +23,6 @@ public class PlayerShield : MonoBehaviour
     {
         playerParentYAxis = playerParent.transform.rotation.y;
         originalMaterial = shieldModel.GetComponent<Renderer>().material;
-        //changedMaterial = shieldModel.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         shieldBlocked = false;
         hit = false;
         controllerPlayer = GetComponent<CharacterController>();
@@ -57,8 +57,8 @@ public class PlayerShield : MonoBehaviour
     {
         
         Vector3 mov = new Vector3(
-        SimpleInput.GetAxis("Horizontal")*10f,
-        SimpleInput.GetAxis("Vertical")*10f,
+        SimpleInput.GetAxis("Horizontal")*shieldMovementSpeed,
+        SimpleInput.GetAxis("Vertical")*shieldMovementSpeed,
         0);
     
         controllerPlayer.Move(mov*Time.deltaTime);
@@ -67,8 +67,8 @@ public class PlayerShield : MonoBehaviour
     void ReversedTouchJoystickControl()
     {
         Vector3 mov = new Vector3(
-        -1*(SimpleInput.GetAxis("Horizontal")*10f),
-        SimpleInput.GetAxis("Vertical")*10f,
+        -1*(SimpleInput.GetAxis("Horizontal")*shieldMovementSpeed),
+        SimpleInput.GetAxis("Vertical")*shieldMovementSpeed,
         0);
     
         controllerPlayer.Move(mov*Time.deltaTime);
@@ -76,7 +76,6 @@ public class PlayerShield : MonoBehaviour
 
     void BandAidFixToShieldGettingOutOfBorders()
     {
-        // || PlayerParent.isSliding
         if(PlayerParent.enemyDetected)
         {
             ctr++;

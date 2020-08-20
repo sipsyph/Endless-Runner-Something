@@ -10,7 +10,7 @@ public class Canvas : MonoBehaviour
     public TextMeshProUGUI healthText, enemyHealthText, enemyNameText;
 
     public Button upperLeftWeaponBtn, upperRightWeaponBtn, bottomLeftWeaponBtn, bottomRightWeaponBtn, 
-    inventoryBtn, leftBtn, rightBtn;
+    inventoryBtn;
     public GameObject inventoryPanel, weaponBtnGroup, shieldJoystick;
     void Start()
     {
@@ -21,12 +21,7 @@ public class Canvas : MonoBehaviour
     void Update()
     {
         UpdatePlayerHealthText();
-        //UpdateCurrentEnemyUI();
-        //Debugging text
-        //enemyNameText.text = ""+ PlayerParent.currentEnemy.gameObject.name + "Dead: "+PlayerParent.currentEnemyIsDead;
-        enemyNameText.text = ""+ PlayerParent.currentEnemy.gameObject.name;
-
-        enemyHealthText.text = PlayerParent.currentEnemyHealth.ToString();
+        UpdateCurrentEnemyUI();
     }
 
     void UpdatePlayerHealthText()
@@ -39,11 +34,8 @@ public class Canvas : MonoBehaviour
     {
         if(PlayerParent.enemyDetected)
         {
-            if(PlayerParent.currentEnemy.gameObject.activeSelf)
-            {
-                enemyNameText.text = PlayerParent.currentEnemy.gameObject.name;
-                enemyHealthText.text = PlayerParent.currentEnemyHealth.ToString();
-            }
+            enemyNameText.text = PlayerParent.currentEnemy.gameObject.name;
+            enemyHealthText.text = PlayerParent.currentEnemyHealth.ToString();
         }else{
                 enemyNameText.text = "";
                 enemyHealthText.text = "";

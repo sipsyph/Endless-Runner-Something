@@ -8,7 +8,6 @@ public class Adversary : MonoBehaviour
     private int maxHealth;
     int ctr;
     bool hit;
-    // Start is called before the first frame update
     void Start()
     {
         ctr = 0;
@@ -16,7 +15,6 @@ public class Adversary : MonoBehaviour
         maxHealth = health;
     }
 
-    // Update is called once per frame
     void Update()
     {
         ResetColorAfterHit();
@@ -30,7 +28,7 @@ public class Adversary : MonoBehaviour
             if(PlayerParent.currentEnemy == this.transform)
             {
                 PlayerParent.currentEnemyIsDead = true;
-                health = maxHealth;
+                health = maxHealth; //reset health for next spawn
             }
         }
     }
@@ -53,7 +51,11 @@ public class Adversary : MonoBehaviour
         if(collision.tag == "Player")
         {
             Debug.Log("Adversary is colliding with tag Player");
-            PlayerParent.currentEnemyHealth = health;
+            if(transform==PlayerParent.currentEnemy)
+            {
+                PlayerParent.currentEnemyHealth = health;
+            }
+            
         }
     }
 
@@ -66,7 +68,10 @@ public class Adversary : MonoBehaviour
             
             hit = true;
             health--;
-            PlayerParent.currentEnemyHealth = health;
+            if(transform==PlayerParent.currentEnemy)
+            {
+                PlayerParent.currentEnemyHealth = health;
+            }
             GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
 

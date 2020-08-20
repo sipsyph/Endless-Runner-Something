@@ -15,6 +15,9 @@ TagManager:
   - Player Hitbox
   - Obstacle
   - Node
+  - Pickup
+  - Item
+  - Item Position
   layers:
   - Default
   - TransparentFX
