@@ -9,21 +9,26 @@ public class PlayerParent : MonoBehaviour
     public Button leftBtn, rightBtn; //Temporary buttons for debugging
     
     public Transform mainCamera, secondCamera, playerBody, playerHead, playerInteractableWeapons, playerModel;
-    public GameObject projectileIncomingIndicator;
+    public GameObject projectileIncomingIndicator, backShield, fallingBranchPrefab;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
-    public static bool playerLookingInBag, enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, currentEnemyIsDead;
+    public static bool playerLookingInBag, enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, 
+    currentEnemyIsDead, climbingOnVine;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
 
-    public static bool hittingLeftAreaBlocker, hittingRightAreaBlocker;
-    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, strafingSpeed,speed, playerModelSlidingXOffset;
-    private int slideCtr, jumpCtr;
+    public static bool hittingLeftAreaBlocker, hittingRightAreaBlocker, playerClimbing;
+    public float baseMovementSpeed, jumpSpeedMultiplier, slideSpeedMultiplier, strafingSpeed,speed, playerModelSlidingXOffset
+    , climbingSpeedMultiplier, climbingJumpSpeedMultiplier, climbingVineSpeedMultiplier;
+    private int slideCtr, jumpCtr, fallingBranchCtr;
     private float actualSpeed;
 
     private bool leftBtnPressing, rightBtnPressing;
     void Start()
     {
+        playerClimbing = false;
+        fallingBranchCtr = 0;
+
         currentEnemyIsDead = false;
         playerLookingInBag = false;
         slideCtr = 0;
@@ -63,8 +68,17 @@ public class PlayerParent : MonoBehaviour
     void Update()
     {
         PlayerControls();
-        HandleLookingToAndLookingAwayFromEnemy();
-        HandleAttackModeStates();
+
+        if(playerClimbing)
+        {
+            PlayerClimbingMode();
+        }else{
+            backShield.SetActive(false);
+            secondCamera.GetComponent<Camera>().fieldOfView = 63f; //63 is the default value
+            HandleLookingToAndLookingAwayFromEnemy();
+            HandleAttackModeStates();
+        }
+
     }
 
     void CameraFightingMode()
@@ -106,7 +120,7 @@ public class PlayerParent : MonoBehaviour
             newRotation.x = 0.0f;
             newRotation.z = 0.0f;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 5f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 2f * Time.deltaTime);
 
             //mainCamera.localPosition = new Vector3(0, mainCamera.localPosition.y, mainCamera.localPosition.z);
 
@@ -127,13 +141,34 @@ public class PlayerParent : MonoBehaviour
         else
         {
             CameraNotFightingMode();
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*10);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*5);
             ConstantForwardMovement();
         }
     }
     void ConstantForwardMovement()
     {
         transform.Translate(Vector3.forward * Time.deltaTime * actualSpeed);
+    }
+
+    void PlayerClimbingMode()
+    {
+        backShield.SetActive(true);
+        secondCamera.GetComponent<Camera>().fieldOfView = 85f;
+        CameraNotFightingMode();
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime*5);
+        ConstantForwardMovement();
+        SpawnFallingBranchRepeat();
+    }
+
+    void SpawnFallingBranchRepeat()
+    {
+        fallingBranchCtr++;
+        if(fallingBranchCtr >= 120)
+        {
+            fallingBranchPrefab.transform.GetComponent<Animator>().speed = 0.5f;
+            Instantiate(fallingBranchPrefab, this.transform);
+            fallingBranchCtr = 0;
+        }
     }
 
     void PlayerControls()
@@ -168,23 +203,37 @@ public class PlayerParent : MonoBehaviour
         }
 
         //Jumping
-        if( (Input.GetButtonDown(""+KeyCode.C) || DraggingOnCanvas.draggedUp) && !isJumping )
+        if(  ((Input.GetButtonDown(""+KeyCode.C) || DraggingOnCanvas.draggedUp) && !isJumping) )
         {
             Debug.Log("Jump Button");
             slideCtr = 0;
             isSliding = false;
-            PlayerAnimation.PlayWalkAnimation();
-            PlayerAnimation.PlayJumpAnimation();
+            if(playerClimbing)
+            {
+                PlayerAnimation.PlayClimbAnimation();
+                PlayerAnimation.PlayClimbJumpAnimation();
+            }else{
+                PlayerAnimation.PlayWalkAnimation();
+                PlayerAnimation.PlayJumpAnimation();
+            }
+
             isJumping = true;
             DraggingOnCanvas.draggedUp = false;
         }
         if(isJumping)
         {
-            speed = actualSpeed = baseMovementSpeed * jumpSpeedMultiplier;
+            if(playerClimbing)
+            {
+                strafingSpeed = 8f;
+                speed = actualSpeed = baseMovementSpeed * climbingJumpSpeedMultiplier;
+            }else{
+                speed = actualSpeed = baseMovementSpeed * jumpSpeedMultiplier;
+            }
+            
         }
 
         //Sliding
-        if( (Input.GetButtonDown(""+KeyCode.V) || DraggingOnCanvas.draggedDown) && !isSliding ){
+        if( !playerClimbing && ((Input.GetButtonDown(""+KeyCode.V) || DraggingOnCanvas.draggedDown) && !isSliding) ){
             Debug.Log("Slide Button");
             isJumping = false;
             PlayerAnimation.PlayWalkAnimation();
@@ -204,12 +253,33 @@ public class PlayerParent : MonoBehaviour
             }
         }
 
+        //Basic Forward Movement
         if(!isSliding && !isJumping)
         {
-            PlayerAnimation.PlayWalkAnimation();
-            speed = actualSpeed = baseMovementSpeed;
+            if(playerClimbing)
+            {
+                
+                
+                if(climbingOnVine)
+                {
+                    actualSpeed = baseMovementSpeed * climbingVineSpeedMultiplier;
+                    strafingSpeed =4f;
+                }else{
+                    actualSpeed = baseMovementSpeed * climbingSpeedMultiplier;
+                    strafingSpeed = 1.5f;
+                }
+                PlayerAnimation.PlayClimbAnimation();
+            }else{
+                strafingSpeed = 3f;
+                speed = actualSpeed = baseMovementSpeed;
+                PlayerAnimation.PlayWalkAnimation();
+            }
+            
+            
         }
     }
+
+
 
     public void BandageFixToPlayerModelSlidingXOvershoot(float yValue)
     {

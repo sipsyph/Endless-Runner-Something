@@ -18,7 +18,7 @@ private Rigidbody rigidbody;
         playerParentAnimator = pubPlayerParentAnimator;
         triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger","LookingInBagTrigger"};
         triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger",
-        "HitSlideWallTrigger","HitJumpWallTrigger"};
+        "HitSlideWallTrigger","HitJumpWallTrigger", "ClimbTrigger", "ClimbJumpTrigger"};
     }
 
     public void AlertObservers(string message)
@@ -81,16 +81,28 @@ private Rigidbody rigidbody;
         playerParentAnimator.SetTrigger("WalkTrigger");
     }
 
+    public static void PlayClimbAnimation()
+    {
+        ResetTriggerForParentExcept("ClimbTrigger");
+        playerParentAnimator.SetTrigger("ClimbTrigger");
+    }
+
+    public static void PlayClimbJumpAnimation()
+    {
+        ResetTriggerForParentExcept("ClimbJumpTrigger");
+        playerParentAnimator.SetTrigger("ClimbJumpTrigger");
+    }
+
     public static void PlayHitSlideWallAnimation()
     {
-        ResetTriggerForParentExcept("HitSlideWallTrigger");
-        playerParentAnimator.SetTrigger("HitSlideWallTrigger");
+        //ResetTriggerForParentExcept("HitSlideWallTrigger");
+        //playerParentAnimator.SetTrigger("HitSlideWallTrigger");
     }
 
     public static void PlayHitJumpWallAnimation()
     {
-        ResetTriggerForParentExcept("HitJumpWallTrigger");
-        playerParentAnimator.SetTrigger("HitJumpWallTrigger");
+        //ResetTriggerForParentExcept("HitJumpWallTrigger");
+        //playerParentAnimator.SetTrigger("HitJumpWallTrigger");
     }
 
 

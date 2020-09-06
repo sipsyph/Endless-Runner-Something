@@ -58,6 +58,13 @@ public class PlayerCollision : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider collision)
+    {
+        if(collision.name.Contains("Cylinder"))
+        {
+            PlayerParent.climbingOnVine = true;
+        }
+    }
 
     private void OnTriggerExit(Collider collision)
     {
@@ -69,6 +76,11 @@ public class PlayerCollision : MonoBehaviour
         if(collision.name == "Right Area Blocker")
         {
             PlayerParent.hittingRightAreaBlocker = false;
+        }
+
+        if(collision.name.Contains("Cylinder"))
+        {
+            PlayerParent.climbingOnVine = false;
         }
     }
 }

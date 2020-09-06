@@ -6,7 +6,7 @@ public class ShootArrow : MonoBehaviour
 {
     public Camera camera;
     public GameObject arrowPrefab;
-    public Transform arrowSpawn;
+    public Transform arrowSpawn, archerEnemyTransform;
     public float shootForce;
 
     private int ctr, indicatorCtr;
@@ -15,6 +15,7 @@ public class ShootArrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        archerEnemyTransform = this.transform.parent;
         canShoot = true;
     }
 
@@ -30,20 +31,22 @@ public class ShootArrow : MonoBehaviour
                 PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
             }
         }
-        HandleShootInterval();
-
+        Shoot();
     }
 
     void Shoot()
     {
-        PlayerParent.projectileIncomingIndicatorStatic.SetActive(true);
+        EnemyAnimation.PlayKoboldBowShootAnimation();
+        if(archerEnemyTransform.GetComponent<Enemy>().shotFinished)
+        {
+            PlayerParent.projectileIncomingIndicatorStatic.SetActive(true);
 
-        camera.transform.localRotation = Quaternion.Euler(0,DetermineTargetSlot(),0);
-        GameObject arrow = Instantiate(arrowPrefab, arrowSpawn.position, Quaternion.identity);
-        Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        rb.velocity = camera.transform.forward * shootForce;
-        
-
+            camera.transform.localRotation = Quaternion.Euler(0,DetermineTargetSlot(),0);
+            GameObject arrow = Instantiate(arrowPrefab, arrowSpawn.position, Quaternion.identity);
+            Rigidbody rb = arrow.GetComponent<Rigidbody>();
+            rb.velocity = camera.transform.forward * shootForce;
+            archerEnemyTransform.GetComponent<Enemy>().shotFinished = false;
+        }
     }
 
     private float DetermineTargetSlot()

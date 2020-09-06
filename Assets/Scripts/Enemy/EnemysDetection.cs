@@ -29,8 +29,8 @@ public class EnemysDetection : MonoBehaviour
         }else{
             enemyIsMelee = false;
         }
-        movementSpeed = 1f;
-        rotationSpeed = 1f;
+        movementSpeed = 2f;
+        rotationSpeed = 3f;
         startingPosition = enemyTransform.localPosition;
         startingRotation = enemyTransform.localRotation;
         //Debug.Log("Starting Position of "+enemyName+": "+startingPosition);
@@ -88,13 +88,13 @@ public class EnemysDetection : MonoBehaviour
                 bow.SetActive(false);
                 PlayerParent.projectileIncomingIndicatorStatic.SetActive(false);
             }
-
+            EnemyAnimation.ResetAllInCurrentTriggerSetExcept("IdleTrigger");
             enemyTransform.localRotation = startingRotation;
             enemyTransform.localPosition = startingPosition;
             playerDetected = false;
             PlayerParent.currentEnemyIsDead = false;
             playerExited = false;
-            EnemyAnimation.PlayIdleAnimation();
+            
             enemyTransform.gameObject.SetActive(false);
         }
     }
@@ -102,21 +102,28 @@ public class EnemysDetection : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         if(collision.tag == "Player")
-        {
-            
-            if(enemyIsMelee)
-            {
-                
-            }else{
-                PlayerParent.enemyDetected = true;
-                bow.SetActive(true);
-            }
+        {   
             PlayerParent.currentEnemy = enemyTransform;
             PlayerParent.currentEnemyHealth = enemyTransform.gameObject.GetComponent<Adversary>().health;
-            EnemyAnimation.enemyAnimator = enemyTransform.gameObject.GetComponent<Animator>();
+            
             //Debug.Log("Current Enemy animator: "+EnemyAnimation.enemyAnimator.name);
             playerDetected = true;
             //Debug.Log(transform.parent.transform.name+" has detected player");
+            EnemyAnimation.enemyAnimator = enemyTransform.gameObject.GetComponent<Animator>();
+            
+            
+            if(enemyIsMelee)
+            {
+                EnemyAnimation.currentSetOfTriggers = EnemyAnimation.koboldSwordTriggerNames;
+                
+            }else{
+                EnemyAnimation.currentSetOfTriggers = EnemyAnimation.koboldBowTriggerNames;
+                
+                PlayerParent.enemyDetected = true;
+                bow.SetActive(true);
+                //EnemyAnimation.PlayKoboldBowShootAnimation();
+            }
+            
         }
     }
 

@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
             {
                 ctr = 0;
                 playerGotHitBySlideWall = false;
-                PlayerAnimation.PlayWalkAnimation();
+                //PlayerAnimation.PlayWalkAnimation();
             }
         }
         if(playerGotHitByJumpWall)
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
             {
                 ctr = 0;
                 playerGotHitByJumpWall = false;
-                PlayerAnimation.PlayWalkAnimation();
+                //PlayerAnimation.PlayWalkAnimation();
             }
         }
     }

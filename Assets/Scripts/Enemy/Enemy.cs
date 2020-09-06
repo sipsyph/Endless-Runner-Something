@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     // public int firstAttackDamageDealt, secondAttackDamageDealt, thirdAttackDamageDealt;
     Vector3 startingPos;
+    public bool shotFinished;
     void Start()
     {
         //startingPos = transform.localPosition;
@@ -17,12 +18,9 @@ public class Enemy : MonoBehaviour
 
     }
 
-    void CheckIfCurrentEnemyIsThis()
+    public void BowFinishedShot()
     {
-        if(PlayerParent.currentEnemy == this.transform)
-        {
-
-        }
+        shotFinished = true;
     }
 
 }
