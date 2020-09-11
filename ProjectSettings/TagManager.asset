@@ -18,6 +18,7 @@ TagManager:
   - Pickup
   - Item
   - Item Position
+  - Trans Obj
   layers:
   - Default
   - TransparentFX

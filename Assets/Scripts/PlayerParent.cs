@@ -9,7 +9,7 @@ public class PlayerParent : MonoBehaviour
     public Button leftBtn, rightBtn; //Temporary buttons for debugging
     
     public Transform mainCamera, secondCamera, playerBody, playerHead, playerInteractableWeapons, playerModel;
-    public GameObject projectileIncomingIndicator, backShield, fallingBranchPrefab;
+    public GameObject projectileIncomingIndicator, backShield, fallingBranchPrefab, eventSystemObj;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
     public static bool playerLookingInBag, enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, 
@@ -84,6 +84,8 @@ public class PlayerParent : MonoBehaviour
     void CameraFightingMode()
     {
         //TODO: smooth transition from this mode to the other
+        eventSystemObj.GetComponent<CanvasUI>().weaponBtnGroup.SetActive(true);
+        eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(true);
         playerModel.gameObject.SetActive(false);
         mainCamera.GetComponent<Camera>().enabled = true;
         secondCamera.GetComponent<Camera>().enabled = false;
@@ -93,6 +95,8 @@ public class PlayerParent : MonoBehaviour
     void CameraNotFightingMode()
     {
         //TODO: smooth transition from this mode to the other
+        eventSystemObj.GetComponent<CanvasUI>().weaponBtnGroup.SetActive(false);
+        eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(false);
         playerModel.gameObject.SetActive(true);
         mainCamera.GetComponent<Camera>().enabled = false;
         secondCamera.GetComponent<Camera>().enabled = true;

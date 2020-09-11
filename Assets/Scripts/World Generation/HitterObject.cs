@@ -11,7 +11,7 @@ public class HitterObject : MonoBehaviour
     public Transform[] firstAreaInstanceNodes, secondAreaInstanceNodes;
     
     private string[] genericNodeNames = {"First Node", "Second Node", 
-    "Third Node", "Fourth Node", "Fifth Node", "Melee Enemy Node", "Generic Enemy Node", "Boss Enemy Node"};
+    "Third Node", "Fourth Node", "Fifth Node", "Melee Enemy Node", "Generic Enemy Node", "Last Enemy Node"};
     public float distanceOfNewAreaInstance;
 
     private bool switchInstance;

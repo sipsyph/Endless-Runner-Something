@@ -8,10 +8,10 @@ public class Node : MonoBehaviour
     Transform thisNode;
 
     Transform[] allChildren;
-    List<Transform> allObstacles, allEnemies, allItemPositions, allItems;
+    List<Transform> allObstacles, allEnemies, allItemPositions, allItems, allTransObjs;
     private int randNum, ctr;
 
-    private bool isEnemyNode, canReset;
+    private bool isEnemyNode, canReset, transObjSpawned;
 
     public bool thisNodeHasItemSpawns;
     void Start()
@@ -20,8 +20,15 @@ public class Node : MonoBehaviour
         allEnemies = new List<Transform>();
         allItemPositions = new List<Transform>();
         allItems = new List<Transform>();
+        allTransObjs = new List<Transform>();
+        transObjSpawned = false;
         canReset = false;
         thisNode = transform.parent.transform;
+        if(thisNode.name.Contains("Last")) //also means that this node is the last node in the instance
+        {
+            RandomizeAreaTransitionObjectsInThisNode(); //Determines if trans obj should spawn or not
+        }
+
         if(thisNode.name.Contains("Enemy"))
         {
             isEnemyNode = true;
@@ -29,6 +36,8 @@ public class Node : MonoBehaviour
             isEnemyNode = false;
             RandomizeObstacleObjectsInThisNode();
         }
+        
+
         if(thisNodeHasItemSpawns)
         {
             RandomizeItemObjectsInThisNode();
@@ -65,6 +74,41 @@ public class Node : MonoBehaviour
         }
     }
 
+    void RandomizeAreaTransitionObjectsInThisNode()
+    {
+        Debug.Log("Entered Area Transition code");
+        allChildren = thisNode.GetComponentsInChildren<Transform>(true); //Globalize this indafuture
+
+        foreach(Transform child in allChildren)
+        {
+            if(child.tag == "Trans Obj")
+            {
+                //Debug.Log("Obstacle of Node "+thisNode.name+":"+child.name);
+                child.gameObject.SetActive(false);
+                allTransObjs.Add(child);
+            }
+        }
+
+        if(allTransObjs.Count <= 0)
+        {
+            Debug.Log("This Last Node does not have a trans obj");
+            return;
+        }
+
+        //Debug.Log("OBSTACLE COUNT: "+allObstacles.Count);
+        randNum = Random.Range(0,100);
+        if(randNum>=0 && randNum<=50)
+        {
+            transObjSpawned = true;
+            randNum = Random.Range(0,allTransObjs.Count);
+            allTransObjs[randNum].gameObject.SetActive(true);
+        }else{
+            transObjSpawned = false;
+            Debug.Log("Decided that trans obj should not spawn.");
+        }
+
+        //Debug.Log("Chosen OBSTACLE: "+allObstacles[randNum].name);
+    }
     void RandomizeObstacleObjectsInThisNode()
     {
         allChildren = thisNode.GetComponentsInChildren<Transform>(true);
@@ -148,7 +192,13 @@ public class Node : MonoBehaviour
     }
     void ResetNode()
     {
-        if(isEnemyNode)
+
+        if(thisNode.name.Contains("Last")) //also means that this node is the last node in the instance
+        {
+            RandomizeAreaTransitionObjectsInThisNode(); //Determines if trans obj should spawn or not
+        }
+
+        if(isEnemyNode && !transObjSpawned)
         {
             RandomizeEnemySpawnInThisNode();
         }else{

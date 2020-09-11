@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Canvas : MonoBehaviour
+public class CanvasUI : MonoBehaviour
 {
 
     public TextMeshProUGUI healthText, enemyHealthText, enemyNameText;
