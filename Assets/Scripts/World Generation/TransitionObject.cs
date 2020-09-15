@@ -32,7 +32,17 @@ public class TransitionObject : MonoBehaviour
 
             collision.transform.gameObject.GetComponent<HitterObject>().firstAreaInstance = firstTransitionIntoAreaInst;
             collision.transform.gameObject.GetComponent<HitterObject>().secondAreaInstance = secondTransitionIntoAreaInst;
-            PlayerParent.playerClimbing = true; //Activate player climbing method
+            
+            if(this.transform.parent.name.Contains("Huge Tree"))
+            {
+                PlayerParent.playerClimbing = true;
+            }
+            else if(this.transform.parent.name.Contains("Tree Top"))
+            {
+                PlayerAnimation.PlayWalkAnimation();
+                PlayerParent.playerClimbing = false; 
+            }
+            
             PlayerParent.hittingLeftAreaBlocker = false;
             PlayerParent.hittingRightAreaBlocker = false;
         }

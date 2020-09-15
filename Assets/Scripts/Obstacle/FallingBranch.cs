@@ -24,11 +24,19 @@ public class FallingBranch : MonoBehaviour
         this.transform.SetParent(null);
     }
 
+    void Update()
+    {
+        if(!PlayerParent.playerClimbing)
+        {
+            ERSUtilities.DeleteThis(this.transform);
+        }
+    }
+
     public void AlertThatFallingEnded(string message)
     {
         if(message.Equals("FallingEnded"))
         {
-            SipsyphUtilities.DeleteThis(this.transform);
+            ERSUtilities.DeleteThis(this.transform);
         }
     }
 }
