@@ -18,7 +18,9 @@ private Rigidbody rigidbody;
         playerParentAnimator = pubPlayerParentAnimator;
         triggerNames = new string[]{"LeftMoveTrigger","RightMoveTrigger","IdleTrigger","LookingInBagTrigger"};
         triggerNamesForPlayerParent = new string[]{"JumpTrigger","SlideTrigger","WalkTrigger",
-        "HitSlideWallTrigger","HitJumpWallTrigger", "ClimbTrigger", "ClimbJumpTrigger"};
+        "HitSlideWallTrigger","HitJumpWallTrigger", "ClimbTrigger", "ClimbJumpTrigger",
+        "WalkingLeftShieldTrigger", "WalkingRightShieldTrigger", "WalkingPrepSlashTrigger",
+        "WalkingSlashTrigger"};
     }
 
     public void AlertObservers(string message)
@@ -32,6 +34,13 @@ private Rigidbody rigidbody;
         {
             PlayerParent.isSliding = false;
         }
+    }
+
+    public void AllowWalkingAnimation()
+    {
+        PlayerParent.allowWalkAnimation = true;
+        playerParentAnimator.ResetTrigger("WalkingSlashTrigger");
+        PlayWalkAnimation();
     }
 
     public static void PlayLeftMoveAnimation()
@@ -61,6 +70,33 @@ private Rigidbody rigidbody;
     }
 
     //==============================================//
+    public static void PlayWalkingLeftShield()
+    {
+        ResetTriggerForParentExcept("WalkingLeftShieldTrigger");
+        playerParentAnimator.ResetTrigger("WalkingLeftShieldTrigger");
+        playerParentAnimator.SetTrigger("WalkingLeftShieldTrigger");
+    }
+    
+    public static void PlayWalkingRightShield()
+    {
+        ResetTriggerForParentExcept("WalkingRightShieldTrigger");
+        playerParentAnimator.ResetTrigger("WalkingRightShieldTrigger");
+        playerParentAnimator.SetTrigger("WalkingRightShieldTrigger");
+    }
+
+    public static void PlayWalkingPrepSlash()
+    {
+        ResetTriggerForParentExcept("WalkingPrepSlashTrigger");
+        playerParentAnimator.ResetTrigger("WalkingPrepSlashTrigger");
+        playerParentAnimator.SetTrigger("WalkingPrepSlashTrigger");
+    }
+
+    public static void PlayWalkingSlash()
+    {
+        ResetTriggerForParentExcept("WalkingSlashTrigger");
+        playerParentAnimator.ResetTrigger("WalkingSlashTrigger");
+        playerParentAnimator.SetTrigger("WalkingSlashTrigger");
+    }
     public static void PlaySlideAnimation()
     {
         ResetTriggerForParentExcept("SlideTrigger");

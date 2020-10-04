@@ -4,57 +4,56 @@ using UnityEngine;
 
 public class SwordAnimation : MonoBehaviour
 {
-public static Animator swordAnimator;
-public static string[] triggerNames;
+public static Animator swordAnimator, swordBtnAnimator;
+public static string[] swordTriggerNames, swordBtnTriggerNames;
 
-public Animator pubSwordAnimator;
+public Animator pubSwordAnimator, pubSwordBtnAnimator;
 
     void Start()
     {
         swordAnimator = pubSwordAnimator;
-        triggerNames = new string[]{"DownwardSlashRightToLeftTrigger","DownwardSlashLeftToRightTrigger",
-        "UpwardSlashLeftToRightTrigger", "UpwardSlashRightToLeftTrigger", "IdleTrigger"};
+        swordBtnAnimator = pubSwordBtnAnimator;
+        swordTriggerNames = new string[]{"PreSlashTrigger", "SlashTrigger","IdleTrigger"};
+        swordBtnTriggerNames = new string[]{"FadeInTrigger","IdleTrigger"};
     }
 
-    public static void PlayDownwardSlashRightToLeft()
+    public static void PlayPreSlash()
     {
-        ResetTriggerExcept("DownwardSlashRightToLeftTrigger");
-        swordAnimator.SetTrigger("DownwardSlashRightToLeftTrigger");
+        ResetTriggerExcept("PreSlashTrigger", swordTriggerNames, swordAnimator);
+        swordAnimator.SetTrigger("PreSlashTrigger");
     }
 
-    public static void PlayDownwardSlashLeftToRight()
+    public static void PlaySlash()
     {
-        ResetTriggerExcept("DownwardSlashLeftToRightTrigger");
-        swordAnimator.SetTrigger("DownwardSlashLeftToRightTrigger");
+        ResetTriggerExcept("SlashTrigger", swordTriggerNames, swordAnimator);
+        swordAnimator.SetTrigger("SlashTrigger");
     }
-
-    public static void PlayUpwardSlashLeftToRight()
-    {
-        ResetTriggerExcept("UpwardSlashLeftToRightTrigger");
-        swordAnimator.SetTrigger("UpwardSlashLeftToRightTrigger");
-    }
-
-    public static void PlayUpwardSlashRightToLeft()
-    {
-        ResetTriggerExcept("UpwardSlashRightToLeftTrigger");
-        swordAnimator.SetTrigger("UpwardSlashRightToLeftTrigger");
-    }
-
 
     public static void PlayIdleAnimation()
     {
-        ResetTriggerExcept("IdleTrigger");
+        ResetTriggerExcept("IdleTrigger", swordTriggerNames, swordAnimator);
         swordAnimator.SetTrigger("IdleTrigger");
     }
+    public static void PlaySwordBtnFadeInAnimation()
+    {
+        ResetTriggerExcept("FadeInTrigger", swordBtnTriggerNames, swordBtnAnimator);
+        swordBtnAnimator.SetTrigger("FadeInTrigger");
+    }
 
-    public static void ResetTriggerExcept(string triggerName)
+    public static void PlaySwordBtnIdleAnimation()
+    {
+        ResetTriggerExcept("IdleTrigger", swordBtnTriggerNames, swordBtnAnimator);
+        swordBtnAnimator.SetTrigger("IdleTrigger");
+    }
+
+    public static void ResetTriggerExcept(string triggerName, string[] triggerNames, Animator animator)
     {
 
         for(int i=0; i<triggerNames.Length;i++)
         {
             if(!triggerName.Equals(triggerNames[i]))
             {
-                swordAnimator.ResetTrigger(triggerNames[i]);
+                animator.ResetTrigger(triggerNames[i]);
                 //Debug.Log("Resetting Trigger: "+triggerNames[i]);
             }
         }
