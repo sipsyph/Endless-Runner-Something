@@ -26,6 +26,8 @@ public class HitterObject : MonoBehaviour
         RandomizeBackgroundObjectsOfThisAreaInst(areaBackgroundOfSecondAreaInst);
     }
 
+    
+
     void InitializeAreaInstances()
     {
         firstAreaInstanceNodes = new Transform[genericNodeNames.Length];

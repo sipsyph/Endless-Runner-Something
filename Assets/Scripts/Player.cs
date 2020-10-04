@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     Ray ray;
     RaycastHit hit;
 
+
+
     private int ctr;
     void Start()
     {

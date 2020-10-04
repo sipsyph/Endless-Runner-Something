@@ -57,10 +57,6 @@ public class Adversary : MonoBehaviour
             }
             
         }
-    }
-
-    private void OnTriggerExit(Collider collision)
-    {
 
         if(PlayerParent.isAttacking && collision.tag == "Weapon")
         {
@@ -74,6 +70,12 @@ public class Adversary : MonoBehaviour
             }
             GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+
+
 
 
     }

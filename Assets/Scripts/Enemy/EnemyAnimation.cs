@@ -120,14 +120,14 @@ public Animator pubEnemyAnimator;
 
     public static void ResetAllInCurrentTriggerSetExcept(string triggerName)
     {
-        //Debug.Log("ERROR => "+triggerName+" Animator: "+enemyAnimator.name);
+        Debug.Log("ERROR => "+triggerName+" Animator: "+enemyAnimator.name);
         for(int i=0; i<currentSetOfTriggers.Length;i++)
         {
-            //Debug.Log("Animator level => triggerName:"+triggerName+" "+i);
+            Debug.Log("Animator level => triggerName:"+triggerName+" "+i);
             if(!triggerName.Equals(currentSetOfTriggers[i]))
             {
                 enemyAnimator.ResetTrigger(currentSetOfTriggers[i]);
-                //Debug.Log("Resetting Trigger: "+triggerNames[i]);
+                Debug.Log("Resetting Trigger: "+currentSetOfTriggers[i]);
             }
         }
         enemyAnimator.SetTrigger("IdleTrigger");
