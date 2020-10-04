@@ -8,11 +8,12 @@ public class PlayerParent : MonoBehaviour
 {
     public Button leftBtn, rightBtn; //Temporary buttons for debugging
     
-    public Transform mainCamera, secondCamera, playerBody, playerHead, playerInteractableWeapons, playerModel;
+    public Transform mainCamera, secondCamera, playerBody, playerHead, playerInteractableWeapons, 
+    playerModel, combatShield;
     public GameObject projectileIncomingIndicator, backShield, fallingBranchPrefab, eventSystemObj;
     public static Transform currentEnemy, playerBodyStatic, playerHeadStatic, activatedEnemy;
     public static GameObject projectileIncomingIndicatorStatic;
-    public static bool playerLookingInBag, enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, 
+    public static bool allowWalkAnimation, playerLookingInBag, enemyDetected, isAttacking, isJumping, isInAttackRange, isSliding, 
     currentEnemyIsDead, climbingOnVine;
 
     public static int currentEnemyHealth, attackingModeDurationCtr;
@@ -26,6 +27,7 @@ public class PlayerParent : MonoBehaviour
     private bool leftBtnPressing, rightBtnPressing;
     void Start()
     {
+        allowWalkAnimation = true;
         playerClimbing = false;
         fallingBranchCtr = 0;
 
@@ -84,23 +86,24 @@ public class PlayerParent : MonoBehaviour
     void CameraFightingMode()
     {
         //TODO: smooth transition from this mode to the other
-        eventSystemObj.GetComponent<CanvasUI>().weaponBtnGroup.SetActive(true);
-        eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(true);
+        //eventSystemObj.GetComponent<CanvasUI>().weaponBtn.gameObject.SetActive(true);
+        //eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(true);
+        combatShield.gameObject.SetActive(true);
         playerModel.gameObject.SetActive(false);
+        playerInteractableWeapons.gameObject.SetActive(true);
         mainCamera.GetComponent<Camera>().enabled = true;
         secondCamera.GetComponent<Camera>().enabled = false;
-        playerInteractableWeapons.gameObject.SetActive(true);
+        
     }
 
     void CameraNotFightingMode()
     {
         //TODO: smooth transition from this mode to the other
-        eventSystemObj.GetComponent<CanvasUI>().weaponBtnGroup.SetActive(false);
-        eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(false);
+        combatShield.gameObject.SetActive(false);
         playerModel.gameObject.SetActive(true);
+        playerInteractableWeapons.gameObject.SetActive(false);
         mainCamera.GetComponent<Camera>().enabled = false;
         secondCamera.GetComponent<Camera>().enabled = true;
-        playerInteractableWeapons.gameObject.SetActive(false);
     }
 
     void HandleAttackModeStates()
@@ -207,63 +210,71 @@ public class PlayerParent : MonoBehaviour
         }
 
         //Jumping
-        if(  ((Input.GetButtonDown(""+KeyCode.C) || DraggingOnCanvas.draggedUp) && !isJumping) )
+        if(allowWalkAnimation)
         {
-            Debug.Log("Jump Button");
-            slideCtr = 0;
-            isSliding = false;
-            if(playerClimbing)
+            if(  ((Input.GetButtonDown(""+KeyCode.C) || DraggingOnCanvas.draggedUp) && !isJumping) )
             {
-                PlayerAnimation.PlayClimbAnimation();
-                PlayerAnimation.PlayClimbJumpAnimation();
-            }else{
-                PlayerAnimation.PlayWalkAnimation();
-                PlayerAnimation.PlayJumpAnimation();
-            }
-
-            isJumping = true;
-            DraggingOnCanvas.draggedUp = false;
-        }
-        if(isJumping)
-        {
-            if(playerClimbing)
-            {
-                strafingSpeed = 8f;
-                speed = actualSpeed = baseMovementSpeed * climbingJumpSpeedMultiplier;
-            }else{
-                speed = actualSpeed = baseMovementSpeed * jumpSpeedMultiplier;
-            }
-            
-        }
-
-        //Sliding
-        if( !playerClimbing && ((Input.GetButtonDown(""+KeyCode.V) || DraggingOnCanvas.draggedDown) && !isSliding) ){
-            Debug.Log("Slide Button");
-            isJumping = false;
-            PlayerAnimation.PlayWalkAnimation();
-            PlayerAnimation.PlaySlideAnimation();
-            slideCtr = 0;
-            isSliding = true;
-            DraggingOnCanvas.draggedDown = false;
-        }
-        if(isSliding)
-        {
-            speed = actualSpeed = baseMovementSpeed * slideSpeedMultiplier;
-            slideCtr++;
-            if(slideCtr>=45)
-            {
-                isSliding = false;
+                eventSystemObj.GetComponent<CanvasUI>().weaponBtn.gameObject.SetActive(false);
+                eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(false);
+                Debug.Log("Jump Button");
                 slideCtr = 0;
+                isSliding = false;
+                allowWalkAnimation = true;
+                if(playerClimbing)
+                {
+                    PlayerAnimation.PlayClimbAnimation();
+                    PlayerAnimation.PlayClimbJumpAnimation();
+                }else{
+                    HandlePlayingOfWalkAnimation();
+                    PlayerAnimation.PlayJumpAnimation();
+                }
+
+                isJumping = true;
+                DraggingOnCanvas.draggedUp = false;
+            }
+            if(isJumping)
+            {
+                if(playerClimbing)
+                {
+                    strafingSpeed = 8f;
+                    speed = actualSpeed = baseMovementSpeed * climbingJumpSpeedMultiplier;
+                }else{
+                    speed = actualSpeed = baseMovementSpeed * jumpSpeedMultiplier;
+                }
+                
+            }
+
+            //Sliding
+            if( !playerClimbing && ((Input.GetButtonDown(""+KeyCode.V) || DraggingOnCanvas.draggedDown) && !isSliding) ){
+                eventSystemObj.GetComponent<CanvasUI>().weaponBtn.gameObject.SetActive(false);
+                eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(false);
+                Debug.Log("Slide Button");
+                isJumping = false;
+                allowWalkAnimation = true;
+                HandlePlayingOfWalkAnimation();
+                PlayerAnimation.PlaySlideAnimation();
+                slideCtr = 0;
+                isSliding = true;
+                DraggingOnCanvas.draggedDown = false;
+            }
+            if(isSliding)
+            {
+                speed = actualSpeed = baseMovementSpeed * slideSpeedMultiplier;
+                slideCtr++;
+                if(slideCtr>=45)
+                {
+                    isSliding = false;
+                    slideCtr = 0;
+                }
             }
         }
+        
 
         //Basic Forward Movement
         if(!isSliding && !isJumping)
         {
             if(playerClimbing)
             {
-                
-                
                 if(climbingOnVine)
                 {
                     actualSpeed = baseMovementSpeed * climbingVineSpeedMultiplier;
@@ -274,16 +285,26 @@ public class PlayerParent : MonoBehaviour
                 }
                 PlayerAnimation.PlayClimbAnimation();
             }else{
+                eventSystemObj.GetComponent<CanvasUI>().weaponBtn.gameObject.SetActive(true);
+                eventSystemObj.GetComponent<CanvasUI>().shieldJoystick.SetActive(true);
                 strafingSpeed = 3f;
                 speed = actualSpeed = baseMovementSpeed;
-                PlayerAnimation.PlayWalkAnimation();
+                HandlePlayingOfWalkAnimation();
             }
             
             
         }
     }
 
-
+    void HandlePlayingOfWalkAnimation()
+    {
+        if(allowWalkAnimation)
+        {
+            PlayerAnimation.PlayWalkAnimation();
+        }else{
+            
+        }
+    }
 
     public void BandageFixToPlayerModelSlidingXOvershoot(float yValue)
     {
