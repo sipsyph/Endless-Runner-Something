@@ -10,8 +10,8 @@ public class CanvasUI : MonoBehaviour
     public TextMeshProUGUI healthText, enemyHealthText, enemyNameText;
 
     public Button upperLeftWeaponBtn, upperRightWeaponBtn, bottomLeftWeaponBtn, bottomRightWeaponBtn, 
-    inventoryBtn;
-    public GameObject inventoryPanel, weaponBtnGroup, shieldJoystick;
+    inventoryBtn, weaponBtn;
+    public GameObject inventoryPanel, shieldJoystick;
     void Start()
     {
         healthText.text = UIResources.health + Player.playerHealth.ToString();
@@ -43,42 +43,23 @@ public class CanvasUI : MonoBehaviour
         }
     }
 
+
+
     void SetupButtonEvents()
     {
-        upperLeftWeaponBtn.onClick.AddListener(() =>
-        {
-            ResetPlayerAttackingMode();
-            SwordAnimation.PlayDownwardSlashLeftToRight();
-        });
-        upperRightWeaponBtn.onClick.AddListener(() =>
-        {
-            ResetPlayerAttackingMode();
-            SwordAnimation.PlayDownwardSlashRightToLeft();
-        });
-        bottomLeftWeaponBtn.onClick.AddListener(() =>
-        {
-            ResetPlayerAttackingMode();
-            SwordAnimation.PlayUpwardSlashLeftToRight();
-        });
-        bottomRightWeaponBtn.onClick.AddListener(() =>
-        {
-            ResetPlayerAttackingMode();
-            SwordAnimation.PlayUpwardSlashRightToLeft();
-        });
-
         inventoryBtn.onClick.AddListener(() =>
         {
             if(inventoryPanel.activeSelf)
             {
                 PlayerParent.playerLookingInBag = false;
                 PlayerAnimation.PlayIdleAnimation();
-                weaponBtnGroup.SetActive(true);
+                weaponBtn.gameObject.SetActive(true);
                 shieldJoystick.SetActive(true);
                 inventoryPanel.SetActive(false);
             }else{
                 PlayerParent.playerLookingInBag = true;
                 //PlayerAnimation.PlayLookingInBagAnimation();
-                weaponBtnGroup.SetActive(false);
+                weaponBtn.gameObject.SetActive(false);
                 shieldJoystick.SetActive(false);
                 inventoryPanel.SetActive(true);
             }
